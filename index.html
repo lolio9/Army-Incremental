@@ -1,0 +1,510 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Army Incremental</title>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+
+    <header>
+        <h1>Army Incremental</h1>
+        <div id="rank">Rank: Private</div>
+        <div id="resources">
+            <span>Money: <span id="money">0</span></span>
+            <span>XP: <span id="xp">0</span></span>
+        </div>
+        <nav>
+            <ul>
+                <li><a href="#" onclick="showSection('dashboard')" class="active">Dashboard</a></li>
+                <li><a href="#" onclick="showSection('missions')">Missions</a></li>
+                <li><a href="#" onclick="showSection('crafting')">Crafting</a></li>
+                <li><a href="#" onclick="showSection('research')">Research</a></li>
+                <li><a href="#" onclick="showSection('combat')">Combat</a></li>
+                <li><a href="#" onclick="showSection('barracks')">Barracks</a></li>
+                <li><a href="#" onclick="showSection('economy')">Economy</a></li>
+                <li><a href="#" onclick="showSection('ranks')">Ranks</a></li>
+            </ul>
+        </nav>
+    </header>
+    <main>
+        <section id="dashboard" class="section active">
+            <h2>DASHBOARD</h2>
+            <p>Overview of your current status, including resources, rank, and ongoing tasks.</p>
+            <div class="stats-grid">
+                <div class="stat-card">
+                    <h3>Total Money</h3>
+                    <p id="totalMoney">0</p>
+                </div>
+                <div class="stat-card">
+                    <h3>Total XP</h3>
+                    <p id="totalXP">0</p>
+                </div>
+                <div class="stat-card">
+                    <h3>Resource Generation</h3>
+                    <p id="resourceGeneration">10</p>
+                </div>
+                <div class="stat-card">
+                    <h3>Current Rank</h3>
+                    <div class="rank-box">
+                        <p id="currentRank">Private</p>
+                    </div>
+                </div>
+                <div class="stat-card">
+                    <h3>Units</h3>
+                    <p>Soldiers: <span id="soldierCount">0</span></p>
+                    <p>Tanks: <span id="tankCount">0</span></p>
+                    <p>Helicopters: <span id="helicopterCount">0</span></p>
+                </div>
+            </div>
+            <div id="ongoingMissions">
+                <h3>Ongoing Missions</h3>
+                <ul id="missionList"></ul>
+            </div>
+            <div id="recentAchievements">
+                <h3>Recent Achievements</h3>
+                <ul id="achievementList"></ul>
+            </div>
+        </section>
+        
+        <section id="missions" class="section">
+            <h2>Missions</h2>
+            <div class="mission-grid">
+                <div class="mission-card" onclick="startMission('Training Exercise', 10, 5, 5)">
+                    <h3>Training Exercise</h3>
+                    <p>Reward: 10 Money, 5 XP</p>
+                    <p>Duration: 5 minutes</p>
+                </div>
+                <div class="mission-card" onclick="startMission('Field Mission', 20, 10, 10)">
+                    <h3>Field Mission</h3>
+                    <p>Reward: 20 Money, 10 XP</p>
+                    <p>Duration: 10 minutes</p>
+                </div>
+                <div class="mission-card" onclick="startMission('Special Operation', 50, 25, 15)">
+                    <h3>Special Operation</h3>
+                    <p>Reward: 50 Money, 25 XP</p>
+                    <p>Duration: 15 minutes</p>
+                </div>
+            </div>
+            <div id="missionModal" class="modal">
+                <div class="modal-content">
+                    <span class="close" onclick="closeModal('missionModal')">&times;</span>
+                    <h2 id="missionTitle"></h2>
+                    <p id="missionDescription"></p>
+                    <p id="missionRewards"></p>
+                    <p id="missionCountdown"></p>
+                </div>
+            </div>
+        </section>
+
+        <section id="crafting" class="section">
+            <h2>CRAFTING</h2>
+            <div class="crafting-grid">
+                <div class="crafting-card" onclick="craftItem('Soldier', 10)">
+                    <img src="soldier.png" alt="Soldier">
+                    <h3>Craft Soldier</h3>
+                    <p>Cost: 10 Money</p>
+                </div>
+                <div class="crafting-card" onclick="craftItem('Tank', 50)">
+                    <img src="tank.png" alt="Tank">
+                    <h3>Craft Tank</h3>
+                    <p>Cost: 50 Money</p>
+                </div>
+                <div class="crafting-card" onclick="craftItem('Helicopter', 100)">
+                    <img src="helicopter.png" alt="Helicopter">
+                    <h3>Craft Helicopter</h3>
+                    <p>Cost: 100 Money</p>
+                </div>
+                <div class="crafting-card" onclick="craftItem('Sniper Team', 200)">
+                    <img src="sniper_team.png" alt="Sniper Team">
+                    <h3>Craft Sniper Team</h3>
+                    <p>Cost: 200 Money</p>
+                </div>
+                <div class="crafting-card" onclick="craftItem('Medic Unit', 300)">
+                    <img src="medic_unit.png" alt="Medic Unit">
+                    <h3>Craft Medic Unit</h3>
+                    <p>Cost: 300 Money</p>
+                </div>
+                <div class="crafting-card" onclick="craftItem('Artillery', 500)">
+                    <img src="artillery.png" alt="Artillery">
+                    <h3>Craft Artillery</h3>
+                    <p>Cost: 500 Money</p>
+                </div>
+                <div class="crafting-card" onclick="craftItem('Drone', 800)">
+                    <img src="drone.png" alt="Drone">
+                    <h3>Craft Drone</h3>
+                    <p>Cost: 800 Money</p>
+                </div>
+                <div class="crafting-card" onclick="craftItem('Naval Ship', 1200)">
+                    <img src="naval_ship.png" alt="Naval Ship">
+                    <h3>Craft Naval Ship</h3>
+                    <p>Cost: 1,200 Money</p>
+                </div>
+                <div class="crafting-card" onclick="craftItem('Submarine', 1500)">
+                    <img src="submarine.png" alt="Submarine">
+                    <h3>Craft Submarine</h3>
+                    <p>Cost: 1,500 Money</p>
+                </div>
+                <div class="crafting-card" onclick="craftItem('Heavy Tank', 1800)">
+                    <img src="heavy_tank.png" alt="Heavy Tank">
+                    <h3>Craft Heavy Tank</h3>
+                    <p>Cost: 1,800 Money</p>
+                </div>
+                <div class="crafting-card" onclick="craftItem('Jet Fighter', 2000)">
+                    <img src="jet_fighter.png" alt="Jet Fighter">
+                    <h3>Craft Jet Fighter</h3>
+                    <p>Cost: 2,000 Money</p>
+                </div>
+                <div class="crafting-card" onclick="craftItem('Missile Launcher', 2500)">
+                    <img src="missile_launcher.png" alt="Missile Launcher">
+                    <h3>Craft Missile Launcher</h3>
+                    <p>Cost: 2,500 Money</p>
+                </div>
+                <div class="crafting-card" onclick="craftItem('Stealth Bomber', 3000)">
+                    <img src="stealth_bomber.png" alt="Stealth Bomber">
+                    <h3>Craft Stealth Bomber</h3>
+                    <p>Cost: 3,000 Money</p>
+                </div>
+            </div>
+        </section>        
+
+        <section id="research" class="section">
+            <h2>Research</h2>
+            <div class="item" onclick="researchItem('Infantry Training', 20)">Infantry Training - Cost: 20 XP</div>
+            <div class="item" onclick="researchItem('Advanced Weaponry', 50)">Advanced Weaponry - Cost: 50 XP</div>
+            <div class="item" onclick="researchItem('Vehicle Armor', 30)">Vehicle Armor - Cost: 30 XP</div>
+            <div class="item" onclick="researchItem('Aviation Technology', 70)">Aviation Technology - Cost: 70 XP</div>
+            <div class="item" onclick="researchItem('Drone Technology', 100)">Drone Technology - Cost: 100 XP</div>
+            <div class="item" onclick="researchItem('Cyber Warfare', 150)">Cyber Warfare - Cost: 150 XP</div>
+        </section>  
+
+        <section id="barracks" class="section">
+            <h2 class="section-header">BARRACKS</h2>
+            <div class="barracks-grid">
+                <div class="barracks-card" id="barracksSoldier">
+                    <h3>Soldiers</h3>
+                    <p>Count: <span id="soldierCount">0</span></p>
+                    <p>Power: <span id="soldierPower">10</span></p>
+                    <p>Upgrade: <span id="soldierUpgradeCost">10</span> XP</p>
+                </div>
+                <div class="barracks-card" id="barracksTank">
+                    <h3>Tanks</h3>
+                    <p>Count: <span id="tankCount">0</span></p>
+                    <p>Power: <span id="tankPower">50</span></p>
+                    <p>Upgrade: <span id="tankUpgradeCost">30</span> XP</p>
+                </div>
+                <div class="barracks-card" id="barracksHelicopter">
+                    <h3>Helicopters</h3>
+                    <p>Count: <span id="helicopterCount">0</span></p>
+                    <p>Power: <span id="helicopterPower">100</span></p>
+                    <p>Upgrade: <span id="helicopterUpgradeCost">50</span> XP</p>
+                </div>
+                <div class="barracks-card" id="barracksArtillery">
+                    <h3>Artillery</h3>
+                    <p>Count: <span id="artilleryCount">0</span></p>
+                    <p>Power: <span id="artilleryPower">500</span></p>
+                    <p>Upgrade: <span id="artilleryUpgradeCost">250</span> XP</p>
+                </div>
+                <div class="barracks-card" id="barracksDrone">
+                    <h3>Drone</h3>
+                    <p>Count: <span id="droneCount">0</span></p>
+                    <p>Power: <span id="dronePower">800</span></p>
+                    <p>Upgrade: <span id="droneUpgradeCost">400</span> XP</p>
+                </div>
+                <div class="barracks-card" id="barracksNavalShip">
+                    <h3>Naval Ship</h3>
+                    <p>Count: <span id="navalShipCount">0</span></p>
+                    <p>Power: <span id="navalShipPower">1200</span></p>
+                    <p>Upgrade: <span id="navalShipUpgradeCost">600</span> XP</p>
+                </div>
+                <div class="barracks-card" id="barracksSubmarine">
+                    <h3>Submarine</h3>
+                    <p>Count: <span id="submarineCount">0</span></p>
+                    <p>Power: <span id="submarinePower">1500</span></p>
+                    <p>Upgrade: <span id="submarineUpgradeCost">750</span> XP</p>
+                </div>
+                <div class="barracks-card" id="barracksJetFighter">
+                    <h3>Jet Fighter</h3>
+                    <p>Count: <span id="jetFighterCount">0</span></p>
+                    <p>Power: <span id="jetFighterPower">2000</span></p>
+                    <p>Upgrade: <span id="jetFighterUpgradeCost">1000</span> XP</p>
+                </div>
+                <div class="barracks-card" id="barracksMissileLauncher">
+                    <h3>Missile Launcher</h3>
+                    <p>Count: <span id="missileLauncherCount">0</span></p>
+                    <p>Power: <span id="missileLauncherPower">2500</span></p>
+                    <p>Upgrade: <span id="missileLauncherUpgradeCost">1250</span> XP</p>
+                </div>
+                <div class="barracks-card" id="barracksSniperTeam">
+                    <h3>Sniper Team</h3>
+                    <p>Count: <span id="sniperTeamCount">0</span></p>
+                    <p>Power: <span id="sniperTeamPower">3000</span></p>
+                    <p>Upgrade: <span id="sniperTeamUpgradeCost">1500</span> XP</p>
+                </div>
+                <div class="barracks-card" id="barracksMedicUnit">
+                    <h3>Medic Unit</h3>
+                    <p>Count: <span id="medicUnitCount">0</span></p>
+                    <p>Power: <span id="medicUnitPower">3500</span></p>
+                    <p>Upgrade: <span id="medicUnitUpgradeCost">1750</span> XP</p>
+                </div>
+                <div class="barracks-card" id="barracksHeavyTank">
+                    <h3>Heavy Tank</h3>
+                    <p>Count: <span id="heavyTankCount">0</span></p>
+                    <p>Power: <span id="heavyTankPower">4000</span></p>
+                    <p>Upgrade: <span id="heavyTankUpgradeCost">2000</span> XP</p>
+                </div>
+                <div class="barracks-card" id="barracksStealthBomber">
+                    <h3>Stealth Bomber</h3>
+                    <p>Count: <span id="stealthBomberCount">0</span></p>
+                    <p>Power: <span id="stealthBomberPower">4500</span></p>
+                    <p>Upgrade: <span id="stealthBomberUpgradeCost">2250</span> XP</p>
+                </div>
+            </div>
+            <div class="barracks-upgrade">
+                <div class="item pulsing" onclick="upgradeUnit('Soldier')">Upgrade Soldiers - Cost: <span id="soldierUpgradeCost">10</span> XP</div>
+                <div class="item pulsing" onclick="upgradeUnit('Tank')">Upgrade Tanks - Cost: <span id="tankUpgradeCost">30</span> XP</div>
+                <div class="item pulsing" onclick="upgradeUnit('Helicopter')">Upgrade Helicopters - Cost: <span id="helicopterUpgradeCost">50</span> XP</div>
+                <div class="item pulsing" onclick="upgradeUnit('Artillery')">Upgrade Artillery - Cost: <span id="artilleryUpgradeCost">250</span> XP</div>
+                <div class="item pulsing" onclick="upgradeUnit('Drone')">Upgrade Drones - Cost: <span id="droneUpgradeCost">400</span> XP</div>
+                <div class="item pulsing" onclick="upgradeUnit('Naval Ship')">Upgrade Naval Ships - Cost: <span id="navalShipUpgradeCost">600</span> XP</div>
+                <div class="item pulsing" onclick="upgradeUnit('Submarine')">Upgrade Submarines - Cost: <span id="submarineUpgradeCost">750</span> XP</div>
+                <div class="item pulsing" onclick="upgradeUnit('Jet Fighter')">Upgrade Jet Fighters - Cost: <span id="jetFighterUpgradeCost">1000</span> XP</div>
+                <div class="item pulsing" onclick="upgradeUnit('Missile Launcher')">Upgrade Missile Launchers - Cost: <span id="missileLauncherUpgradeCost">1250</span> XP</div>
+                <div class="item pulsing" onclick="upgradeUnit('Sniper Team')">Upgrade Sniper Teams - Cost: <span id="sniperTeamUpgradeCost">1500</span> XP</div>
+                <div class="item pulsing" onclick="upgradeUnit('Medic Unit')">Upgrade Medic Units - Cost: <span id="medicUnitUpgradeCost">1750</span> XP</div>
+                <div class="item pulsing" onclick="upgradeUnit('Heavy Tank')">Upgrade Heavy Tanks - Cost: <span id="heavyTankUpgradeCost">2000</span> XP</div>
+                <div class="item pulsing" onclick="upgradeUnit('Stealth Bomber')">Upgrade Stealth Bombers - Cost: <span id="stealthBomberUpgradeCost">2250</span> XP</div>
+            </div>
+        </section>
+
+        <section id="combat" class="section">
+            <h2>COMBAT</h2>
+            <div id="combatOverview" class="combat-overview">
+                <h3>Current Units</h3>
+                <p>Soldiers: <span id="currentSoldiers">0</span></p>
+                <p>Tanks: <span id="currentTanks">0</span></p>
+                <p>Helicopters: <span id="currentHelicopters">0</span></p>
+                <p>Total Power: <span id="totalPower">0</span></p>
+            </div>
+            
+            <div class="combat-actions">
+                <h3>Engage in Combat</h3>
+                <div class="combat-unit" onclick="engageCombat('Soldiers', 10, 50)">
+                    <p>Soldiers</p>
+                    <p>Power: 10</p>
+                    <button>Engage</button>
+                </div>
+                <div class="combat-unit" onclick="engageCombat('Tanks', 50, 100)">
+                    <p>Tanks</p>
+                    <p>Power: 50</p>
+                    <button>Engage</button>
+                </div>
+                <div class="combat-unit" onclick="engageCombat('Helicopters', 100, 200)">
+                    <p>Helicopters</p>
+                    <p>Power: 100</p>
+                    <button>Engage</button>
+                </div>
+            </div>
+            <div id="combatResult" class="combat-result">
+                <!-- Results of the combat will be displayed here -->
+            </div>
+        </section>
+
+        <section id="economy" class="section">
+            <h2>ECONOMY</h2>
+            <div class="economy-grid">
+                <div class="economy-card">
+                    <h3>Total Money</h3>
+                    <p id="totalMoney">0</p>
+                </div>
+                <div class="economy-card">
+                    <h3>Total XP</h3>
+                    <p id="totalXP">0</p>
+                </div>
+                <div class="economy-card">
+                    <h3>Resource Generation</h3>
+                    <p>Cost: 100 XP</p>
+                    <button class="economy-button" onclick="upgradeEconomy('Resource Generation', 100)">Upgrade</button>
+                </div>
+                <div class="economy-card">
+                    <h3>Advanced Logistics</h3>
+                    <p>Cost: 200 XP</p>
+                    <button class="economy-button" onclick="upgradeEconomy('Advanced Logistics', 200)">Upgrade</button>
+                </div>
+                <div class="economy-card">
+                    <h3>Financial Management</h3>
+                    <p>Cost: 300 XP</p>
+                    <button class="economy-button" onclick="upgradeEconomy('Financial Management', 300)">Upgrade</button>
+                </div>
+            </div>
+        </section>
+
+
+
+
+
+        
+
+        <section id="ranks" class="section active">
+            <h2>Ranks</h2>
+            <div class="ranks-grid">
+                <div class="rank-card" onclick="showRankDetails('Private')">
+                    <h3>Private</h3>
+                </div>
+                <div class="rank-card" onclick="showRankDetails('Private Second Class')">
+                    <h3>Private Second Class</h3>
+                </div>
+                <div class="rank-card" onclick="showRankDetails('Private First Class')">
+                    <h3>Private First Class</h3>
+                </div>
+                <div class="rank-card" onclick="showRankDetails('Specialist')">
+                    <h3>Specialist</h3>
+                </div>
+                <div class="rank-card" onclick="showRankDetails('Corporal')">
+                    <h3>Corporal</h3>
+                </div>
+                <div class="rank-card" onclick="showRankDetails('Sergeant')">
+                    <h3>Sergeant</h3>
+                </div>
+                <div class="rank-card" onclick="showRankDetails('Staff Sergeant')">
+                    <h3>Staff Sergeant</h3>
+                </div>
+                <div class="rank-card" onclick="showRankDetails('Sergeant First Class')">
+                    <h3>Sergeant First Class</h3>
+                </div>
+                <div class="rank-card" onclick="showRankDetails('Master Sergeant')">
+                    <h3>Master Sergeant</h3>
+                </div>
+                <div class="rank-card" onclick="showRankDetails('First Sergeant')">
+                    <h3>First Sergeant</h3>
+                </div>
+                <div class="rank-card" onclick="showRankDetails('Sergeant Major')">
+                    <h3>Sergeant Major</h3>
+                </div>
+                <div class="rank-card" onclick="showRankDetails('Command Sergeant Major')">
+                    <h3>Command Sergeant Major</h3>
+                </div>
+                <div class="rank-card" onclick="showRankDetails('Sergeant Major of the Army')">
+                    <h3>Sergeant Major of the Army</h3>
+                </div>
+                <div class="rank-card" onclick="showRankDetails('Second Lieutenant')">
+                    <h3>Second Lieutenant</h3>
+                </div>
+                <div class="rank-card" onclick="showRankDetails('First Lieutenant')">
+                    <h3>First Lieutenant</h3>
+                </div>
+                <div class="rank-card" onclick="showRankDetails('Captain')">
+                    <h3>Captain</h3>
+                </div>
+                <div class="rank-card" onclick="showRankDetails('Major')">
+                    <h3>Major</h3>
+                </div>
+                <div class="rank-card" onclick="showRankDetails('Lieutenant Colonel')">
+                    <h3>Lieutenant Colonel</h3>
+                </div>
+                <div class="rank-card" onclick="showRankDetails('Colonel')">
+                    <h3>Colonel</h3>
+                </div>
+                <div class="rank-card" onclick="showRankDetails('Brigadier General')">
+                    <h3>Brigadier General</h3>
+                </div>
+                <div class="rank-card" onclick="showRankDetails('Major General')">
+                    <h3>Major General</h3>
+                </div>
+                <div class="rank-card" onclick="showRankDetails('Lieutenant General')">
+                    <h3>Lieutenant General</h3>
+                </div>
+                <div class="rank-card" onclick="showRankDetails('General')">
+                    <h3>General</h3>
+                </div>
+                <div class="rank-card" onclick="showRankDetails('General of the Army')">
+                    <h3>General of the Army</h3>
+                </div>
+            </div>
+            <div id="rankInfo" class="rank-info"></div>
+        </section>
+        
+
+
+
+
+        
+    </main>
+
+    <footer>
+        &copy; 2024 Army Incremental
+    </footer>
+
+    <!-- Modal for Mission Completion -->
+    <div id="completionModal" class="modal">
+        <div class="modal-content">
+            <span class="close" onclick="closeModal('completionModal')">&times;</span>
+            <h2 id="completionTitle"></h2>
+            <p id="completionMessage"></p>
+            <button id="claimRewardButton" onclick="claimMissionReward()">Claim Reward</button>
+        </div>
+    </div>
+
+    <script src="app.js"></script>
+
+    <!-- Success Popup -->
+    <div id="successPopup" class="popup-modal">
+        <h2>Action Successful!</h2>
+        <p>Your action has been completed successfully.</p>
+        <button class="close-button" onclick="closePopup('successPopup')">Close</button>
+    </div>
+
+    <!-- Failure Popup -->
+    <div id="failurePopup" class="popup-modal">
+        <h2>Action Failed</h2>
+        <p>You do not have enough resources to perform this action.</p>
+        <button class="close-button" onclick="closePopup('failurePopup')">Close</button>
+    </div>
+
+    <div id="combatPopup" class="combat-popup">
+        <div class="combat-popup-content">
+            <span class="close" onclick="closeCombatPopup()">&times;</span>
+            <h2>Combat Engaged!</h2>
+            <div class="combat-status">
+                <div class="combat-life-bar">
+                    <div id="playerLifeBar" class="life-bar-fill player"></div>
+                </div>
+                <p>Player</p>
+            </div>
+            <div class="combat-status">
+                <div class="combat-life-bar">
+                    <div id="enemyLifeBar" class="life-bar-fill enemy"></div>
+                </div>
+                <p>Enemy</p>
+            </div>
+            <div id="combatResultMessage" class="combat-result-message"></div>
+            <div id="troopsLostMessage" class="troops-lost-message"></div>
+        </div>
+    </div>
+
+
+
+<!-- Modal for Pay Grade Details -->
+<div id="payGradeModal" class="modal">
+    <div class="modal-content">
+        <span class="close" onclick="closeModal()">&times;</span>
+        <h3 id="payGradeTitle"></h3>
+        <p id="payGradeDescription"></p>
+        <p id="payGradeSalary"></p>
+        <p id="payGradeRequirements"></p>
+    </div>
+</div>
+
+<div id="myModal" class="modal">
+    <div class="modal-content">
+      <span class="close">&times;</span>
+      <!-- Modal content here -->
+      <button id="claimRewardButton">Claim Reward</button>
+    </div>
+  </div>
+  
+
+</body>
+</html>
