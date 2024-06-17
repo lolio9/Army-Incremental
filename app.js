@@ -413,7 +413,7 @@ window.onclick = function(event) {
 // Function to show pay grade details in a modal
 function showPayGradeDetails(payGrade) {
     const payGradeDetails = {
-        "E-1": { title: "E-1", description: "The entry-level rank for enlisted personnel.", salary: "Monthly Salary: $1,733", requirements: "No prior experience required. Basic training completion is needed." },
+        "E-1": { title: "E-1", description: "E-1 is the 1st enlisted paygrade in the United States military.", salary: "Monthly Salary: $1,733", requirements: "No prior experience required. Basic training completion is needed." },
         "E-2": { title: "E-2", description: "Rank for soldiers after initial training.", salary: "Monthly Salary: $1,943", requirements: "Completion of basic training and several months of service." },
         "E-3": { title: "E-3", description: "Private First Class (E-3) and Seaman rank, focuses on gaining experience.", salary: "Monthly Salary: $2,043", requirements: "Generally 6 months to a year of service." },
         "E-4": { title: "E-4", description: "Encompasses Specialist and Corporal ranks.", salary: "Monthly Salary: $2,330", requirements: "2 to 4 years of service and a strong performance in their roles." },
