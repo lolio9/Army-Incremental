@@ -564,6 +564,7 @@ p {
     text-align: center;
     color: #fff; /* White text */
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.5);
+    animation: fadeIn 0.3s ease-out; /* Animation effect */
 }
 
 /* Popup header */
@@ -616,6 +617,13 @@ p {
 .modal .close:hover {
     color: #f00; /* Red color on hover */
 }
+
+/* Animation for popups */
+@keyframes fadeIn {
+    from { opacity: 0; }
+    to { opacity: 1; }
+}
+
 
 
 /* Common section container styles */
