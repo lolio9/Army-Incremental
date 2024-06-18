@@ -148,7 +148,6 @@ function showCompletionModal(name, rewardMoney, rewardXP) {
 }
 
 function claimMissionReward() {
-    const claimButton = document.getElementById('claimRewardButton');
     const rewardMoney = parseInt(claimButton.getAttribute('data-reward-money'));
     const rewardXP = parseInt(claimButton.getAttribute('data-reward-xp'));
     money += rewardMoney;
