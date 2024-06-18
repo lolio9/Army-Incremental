@@ -816,6 +816,18 @@ const totalPower = (soldiers * unitPowers['Soldier']) +
 document.getElementById('totalPower').innerText = totalPower;
 
 
+
+document.querySelectorAll('.close').forEach(button => {
+    button.addEventListener('click', function() {
+        const modalId = this.getAttribute('data-modal');
+        document.getElementById(modalId).style.display = 'none';
+    });
+});
+
+
+
+
+
 // Start the game
 updateResources();
 startGame();
