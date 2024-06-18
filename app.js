@@ -267,6 +267,18 @@ function craftItem(item, cost) {
     }
 }
 
+function craftItem(itemName, cost) {
+    const moneyElement = document.getElementById('money');
+    const money = parseInt(moneyElement.textContent);
+    if (money >= cost) {
+        moneyElement.textContent = money - cost;
+        alert(`You have crafted a ${itemName}!`);
+    } else {
+        document.getElementById('craftingPopupText').textContent = `You don't have enough money to craft a ${itemName}.`;
+        showPopup('craftingPopup');
+    }
+}
+
 function researchItem(item, cost) {
     if (xp >= cost) {
         xp -= cost;
@@ -890,6 +902,16 @@ function closePopupById(popupId) {
     if (popup) {
         popup.style.display = 'none';
     }
+}
+
+function showPopup(popupId) {
+    const popup = document.getElementById(popupId);
+    popup.style.display = "block";
+}
+
+function closePopup(popupId) {
+    const popup = document.getElementById(popupId);
+    popup.style.display = "none";
 }
 
 // Start the game
