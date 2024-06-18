@@ -825,6 +825,39 @@ document.querySelectorAll('.close').forEach(button => {
 });
 
 
+// Function to close any modal with the given id
+function closeModalById(modalId) {
+    const modal = document.getElementById(modalId);
+    if (modal) {
+        modal.style.display = 'none';
+    }
+}
+
+// Function to close popup modals
+function closePopupById(popupId) {
+    const popup = document.getElementById(popupId);
+    if (popup) {
+        popup.style.display = 'none';
+    }
+}
+
+// Add event listeners to all close buttons in popups
+document.querySelectorAll('.popup-modal .close, .modal .close, .popup-modal .close-button').forEach(closeBtn => {
+    closeBtn.addEventListener('click', function() {
+        const modal = this.closest('.popup-modal, .modal');
+        if (modal) {
+            modal.style.display = 'none';
+        }
+    });
+});
+
+// Function to show a specific modal
+function showModal(modalId) {
+    const modal = document.getElementById(modalId);
+    if (modal) {
+        modal.style.display = 'block';
+    }
+}
 
 
 
