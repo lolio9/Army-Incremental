@@ -5,557 +5,863 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Army Incremental</title>
     <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="styles.css">
+    <style>
+        /* Embedded CSS */
+
+        /* Reset and base styles */
+        body {
+            margin: 0;
+            font-family: 'Roboto', sans-serif;
+            background: linear-gradient(to right, #0f2027, #203a43, #2c5364);
+            color: #fff;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        /* Header and Navigation */
+        header {
+            width: 100%;
+            background: rgba(0, 0, 0, 0.9);
+            text-align: center;
+            padding: 20px 0;
+            position: fixed;
+            top: 0;
+            z-index: 1000;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.6);
+        }
+
+        header h1 {
+            margin: 0;
+            font-size: 2.2rem;
+            font-weight: bold;
+            color: #137b19;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.7);
+            letter-spacing: 1.5px;
+        }
+
+        header #rank {
+            margin-top: 10px;
+            font-size: 1.1rem;
+            font-weight: bold;
+            color: #137b19;
+            text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.7);
+        }
+
+        header #resources {
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+            margin-top: 10px;
+        }
+
+        header #resources span {
+            display: inline-block;
+            font-size: 1rem;
+            background: rgba(0, 0, 0, 0.5);
+            padding: 5px 10px;
+            border-radius: 5px;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.3);
+        }
+
+        nav ul {
+            list-style: none;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            gap: 10px;
+            margin-top: 10px;
+            animation: slideIn 1s ease-out forwards;
+        }
+
+        @keyframes slideIn {
+            from {
+                opacity: 0;
+                transform: translateY(-20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        nav ul li {
+            display: inline;
+        }
+
+        nav ul li a {
+            color: #fff;
+            text-decoration: none;
+            padding: 8px 15px;
+            border: 1px solid #fff;
+            border-radius: 5px;
+            transition: background 0.3s, transform 0.3s, box-shadow 0.3s;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+            background: rgba(0, 0, 0, 0.6);
+        }
+
+        nav ul li a:hover,
+        nav ul li a.active {
+            background: #4CAF50;
+            transform: scale(1.05);
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.4);
+        }
+
+        /* Main content */
+        main {
+            flex: 1;
+            width: 70%;
+            max-width: 1000px;
+            margin: 220px auto 120px auto;
+            padding: 15px 20px;
+            background: rgba(0, 0, 0, 0.8);
+            border-radius: 15px;
+            box-shadow: 0 0 20px rgba(0, 0, 0, 0.5);
+            backdrop-filter: blur(5px);
+        }
+
+        .section {
+            display: none;
+        }
+
+        .section.active {
+            display: block;
+            animation: fadeIn 0.5s ease-in;
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(10px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        h2 {
+            font-size: 1.8rem;
+            margin-bottom: 15px;
+            text-align: center;
+            text-transform: uppercase;
+            color: #00ff44;
+            text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.7);
+            border-bottom: 2px solid #4CAF50;
+            padding-bottom: 8px;
+        }
+
+        p {
+            text-align: center;
+            line-height: 1.4;
+            font-size: 1rem;
+            margin-bottom: 15px;
+        }
+
+        /* Dashboard Styles */
+        #dashboard .stats-grid {
+            display: flex;
+            justify-content: space-around;
+            flex-wrap: wrap;
+            gap: 15px;
+        }
+
+        #dashboard .stat-card {
+            background: rgba(0, 0, 0, 0.9);
+            border: 2px solid #4CAF50;
+            padding: 15px;
+            border-radius: 10px;
+            width: 28%;
+            min-width: 200px;
+            text-align: center;
+            transition: transform 0.3s, box-shadow 0.3s;
+            cursor: pointer;
+        }
+
+        #dashboard .stat-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 6px 12px rgba(0, 0, 0, 0.7);
+        }
+
+        #dashboard .stat-card h3 {
+            margin-top: 0;
+            font-size: 1.3rem;
+            color: #00ff44;
+            text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.7);
+        }
+
+        #dashboard .stat-card p {
+            font-size: 1.3rem;
+            color: #ddd;
+        }
+
+        /* Mission Section */
+        #missions .mission-grid {
+            display: flex;
+            justify-content: space-around;
+            flex-wrap: wrap;
+            gap: 15px;
+        }
+
+        #missions .mission-card {
+            background: rgba(0, 0, 0, 0.9);
+            border: 2px solid #4CAF50;
+            padding: 15px;
+            border-radius: 10px;
+            width: 28%;
+            min-width: 200px;
+            text-align: center;
+            transition: transform 0.3s, box-shadow 0.3s;
+            cursor: pointer;
+        }
+
+        #missions .mission-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 6px 12px rgba(0, 0, 0, 0.7);
+        }
+
+        #missions .mission-card h3 {
+            margin-top: 0;
+            font-size: 1.3rem;
+            color: #00ff44;
+            text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.7);
+        }
+
+        #missions .mission-card p {
+            font-size: 1rem;
+            color: #ddd;
+        }
+
+        /* Crafting Section */
+        #crafting .crafting-grid {
+            display: flex;
+            justify-content: space-around;
+            flex-wrap: wrap;
+            gap: 15px;
+            margin-top: 15px;
+        }
+
+        #crafting .crafting-card {
+            background: rgba(0, 0, 0, 0.9);
+            border: 2px solid #4CAF50;
+            padding: 15px;
+            border-radius: 10px;
+            width: 28%;
+            min-width: 200px;
+            text-align: center;
+            transition: transform 0.3s, box-shadow 0.3s;
+            cursor: pointer;
+        }
+
+        #crafting .crafting-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 6px 12px rgba(0, 0, 0, 0.7);
+        }
+
+        #crafting .crafting-card img {
+            width: 80px;
+            height: 80px;
+            margin-bottom: 8px;
+        }
+
+        #crafting .crafting-card h3 {
+            margin-top: 0;
+            font-size: 1.3rem;
+            color: #00ff44;
+            text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.7);
+        }
+
+        #crafting .crafting-card p {
+            font-size: 1rem;
+            color: #ddd;
+        }
+
+        /* Research Section */
+        #research .item {
+            margin: 15px 0;
+            padding: 10px;
+            border: 1px solid #fff;
+            border-radius: 10px;
+            text-align: center;
+            transition: background-color 0.3s, transform 0.3s, box-shadow 0.3s;
+            cursor: pointer;
+            background: rgba(255, 255, 255, 0.1);
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.3);
+            font-size: 1.1rem;
+        }
+
+        #research .item:hover {
+            background-color: rgba(255, 255, 255, 0.2);
+            transform: scale(1.05);
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.4);
+        }
+
+        #research .item:active {
+            transform: scale(0.95);
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+        }
+
+        /* Resources Styles */
+        #resources div {
+            background: rgba(0, 0, 0, 0.5);
+            padding: 8px;
+            border-radius: 5px;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.3);
+        }
+
+        #resources div span {
+            font-weight: bold;
+            color: #00ff44;
+        }
+
+        /* Combat Section Styles */
+        #combat .combat-overview {
+            margin-top: 20px;
+            padding: 20px;
+            background: rgba(0, 0, 0, 0.8);
+            border-radius: 10px;
+            text-align: center;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.5);
+        }
+
+        #combat .combat-overview p {
+            font-size: 1.2rem;
+            margin: 10px 0;
+            color: #ddd;
+        }
+
+        #combat #totalPower {
+            font-size: 1.5rem;
+            color: #00ff44;
+            font-weight: bold;
+        }
+
+        #combat .combat-actions {
+            display: flex;
+            justify-content: space-around;
+            flex-wrap: wrap;
+            gap: 20px;
+            margin-top: 20px;
+        }
+
+        #combat .combat-unit {
+            background: rgba(0, 0, 0, 0.9);
+            border: 2px solid #4CAF50;
+            padding: 15px;
+            border-radius: 10px;
+            width: 28%;
+            min-width: 200px;
+            text-align: center;
+            transition: transform 0.3s, box-shadow 0.3s;
+            cursor: pointer;
+        }
+
+        #combat .combat-unit:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 6px 12px rgba(0, 0, 0, 0.7);
+        }
+
+        #combat .combat-unit button {
+            background-color: #4CAF50;
+            border: none;
+            color: white;
+            padding: 10px 20px;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s, transform 0.3s;
+        }
+
+        #combat .combat-unit button:hover {
+            background-color: #45a049;
+            transform: scale(1.05);
+        }
+
+        #combat .combat-unit button:active {
+            background-color: #3e8e41;
+            transform: scale(0.95);
+        }
+
+        #combat .combat-result {
+            margin-top: 20px;
+            padding: 20px;
+            background: rgba(0, 0, 0, 0.8);
+            border-radius: 10px;
+            text-align: center;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.5);
+            color: #ddd;
+        }
+
+        /* Ranks Section */
+        #ranks .ranks-grid {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 15px;
+            margin-top: 15px;
+        }
+
+        #ranks .rank-card {
+            background: rgba(0, 0, 0, 0.9);
+            border: 2px solid #4CAF50;
+            padding: 15px;
+            border-radius: 10px;
+            width: 20%;
+            min-width: 200px;
+            text-align: center;
+            transition: transform 0.3s, box-shadow 0.3s;
+            cursor: pointer;
+        }
+
+        #ranks .rank-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 6px 12px rgba(0, 0, 0, 0.7);
+        }
+
+        #ranks .rank-card h3 {
+            margin-top: 0;
+            font-size: 1.3rem;
+            color: #00ff44;
+            text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.7);
+        }
+
+        /* Responsive Adjustments */
+        @media (max-width: 1200px) {
+            #ranks .rank-card {
+                width: 23%;
+            }
+        }
+
+        @media (max-width: 992px) {
+            #ranks .rank-card {
+                width: 30%;
+            }
+        }
+
+        @media (max-width: 768px) {
+            #ranks .rank-card {
+                width: 45%;
+            }
+        }
+
+        @media (max-width: 576px) {
+            #ranks .rank-card {
+                width: 90%;
+            }
+        }
+
+        /* Rank Information Details */
+        .rank-info {
+            display: none; /* Hidden by default, shown on click */
+            margin-top: 20px;
+            padding: 20px;
+            background: rgba(0, 0, 0, 0.85);
+            border-radius: 10px;
+            border: 2px solid #4CAF50;
+            color: #fff;
+            text-align: left; /* Align text to the left for better readability */
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.5); /* Add a subtle shadow */
+            animation: fadeIn 0.5s ease-in; /* Smooth fade-in animation */
+        }
+
+        .rank-info h3 {
+            font-size: 1.5rem;
+            color: #00ff44; /* Use the same bright green as other highlights */
+            margin-bottom: 10px;
+            text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.7); /* Text shadow for readability */
+        }
+
+        .rank-info p {
+            font-size: 1rem;
+            line-height: 1.5;
+            color: #ddd;
+            margin-bottom: 10px;
+        }
+
+        .rank-info .highlight {
+            font-weight: bold;
+            color: #4CAF50; /* Bright green for highlights */
+            text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.7);
+        }
+
+        .rank-info .stats {
+            margin-top: 15px;
+            padding: 10px;
+            background: rgba(0, 0, 0, 0.75);
+            border-radius: 5px;
+            border: 1px solid #4CAF50;
+            color: #fff;
+        }
+
+        /* Pay Grade Link Styling */
+        .pay-grade {
+            color: #00ff44;
+            text-decoration: underline;
+            cursor: pointer;
+        }
+
+        /* Modal for Pay Grade Details */
+        .modal {
+            display: none; /* Hidden by default */
+            position: fixed; /* Stay in place */
+            z-index: 1000; /* Sit on top */
+            width: 100%; /* Full width */
+            height: 100%; /* Full height */
+            background-color: rgba(0, 0, 0, 0.8); /* Black background with opacity */
+            display: flex; /* Flexbox for centering */
+            align-items: center; /* Vertically center */
+            justify-content: center; /* Horizontally center */
+            padding: 20px; /* Padding for spacing around the modal */
+            overflow: auto; /* Enable scroll if needed */
+        }
+
+        .modal-content {
+            background-color: #1b2735; /* Dark background */
+            padding: 20px; /* Padding inside the modal */
+            border: 2px solid #4CAF50; /* Bright green border */
+            border-radius: 10px; /* Rounded corners */
+            width: 80%; /* Adjust width as needed */
+            max-width: 600px; /* Maximum width */
+            color: white; /* White text color */
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.5); /* Add a subtle shadow */
+            max-height: 90vh; /* Ensure it doesn't exceed the viewport height */
+            overflow-y: auto; /* Scrollable content if it overflows */
+            text-align: center; /* Center-align the text */
+        }
+
+        .close-modal {
+            color: #aaa; /* Light gray close button */
+            float: right; /* Position it on the right */
+            font-size: 28px; /* Increase font size */
+            font-weight: bold; /* Bold text */
+            cursor: pointer; /* Change cursor to pointer */
+        }
+
+        .close-modal:hover,
+        .close-modal:focus {
+            color: #fff; /* Change color on hover/focus */
+            text-decoration: none; /* Remove underline */
+        }
+
+        .modal-header {
+            margin-bottom: 15px;
+            font-size: 1.8rem;
+            color: #00ff44;
+            text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.7);
+            border-bottom: 2px solid #4CAF50;
+            padding-bottom: 8px;
+        }
+
+        .modal-body {
+            margin-top: 10px;
+            font-size: 1.2rem;
+            line-height: 1.5;
+        }
+
+        /* Modal Button Styles */
+        .modal-button {
+            background-color: #4CAF50;
+            border: none;
+            color: white;
+            padding: 10px 20px;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s, transform 0.3s;
+            margin-top: 20px;
+            display: inline-block;
+        }
+
+        .modal-button:hover {
+            background-color: #45a049;
+            transform: scale(1.05);
+        }
+
+        .modal-button:active {
+            background-color: #3e8e41;
+            transform: scale(0.95);
+        }
+
+    </style>
 </head>
 <body>
-
     <header>
         <h1>Army Incremental</h1>
-        <div id="rank">Rank: Private</div>
+        <div id="rank">Current Rank: <span>Private</span></div>
         <div id="resources">
-            <span>Money: <span id="money">0</span></span>
-            <span>XP: <span id="xp">0</span></span>
+            <span>Gold: <span id="gold">0</span></span>
+            <span>Steel: <span id="steel">0</span></span>
+            <span>Supplies: <span id="supplies">0</span></span>
         </div>
         <nav>
             <ul>
-                <li><a href="#" onclick="showSection('dashboard')" class="active">Dashboard</a></li>
-                <li><a href="#" onclick="showSection('missions')">Missions</a></li>
-                <li><a href="#" onclick="showSection('crafting')">Crafting</a></li>
-                <li><a href="#" onclick="showSection('research')">Research</a></li>
-                <li><a href="#" onclick="showSection('combat')">Combat</a></li>
-                <li><a href="#" onclick="showSection('barracks')">Barracks</a></li>
-                <li><a href="#" onclick="showSection('economy')">Economy</a></li>
-                <li><a href="#" onclick="showSection('ranks')">Ranks</a></li>
+                <li><a href="#" class="nav-link active" data-section="dashboard">Dashboard</a></li>
+                <li><a href="#" class="nav-link" data-section="missions">Missions</a></li>
+                <li><a href="#" class="nav-link" data-section="crafting">Crafting</a></li>
+                <li><a href="#" class="nav-link" data-section="combat">Combat</a></li>
+                <li><a href="#" class="nav-link" data-section="research">Research</a></li>
+                <li><a href="#" class="nav-link" data-section="ranks">Ranks</a></li>
             </ul>
         </nav>
     </header>
+
     <main>
+        <!-- Dashboard Section -->
         <section id="dashboard" class="section active">
-            <h2>DASHBOARD</h2>
-            <p>Overview of your current status, including resources, rank, and ongoing tasks.</p>
+            <h2>Dashboard</h2>
+            <p>Welcome to your army management dashboard. Here you can view your overall stats and progress.</p>
             <div class="stats-grid">
                 <div class="stat-card">
-                    <h3>Total Money</h3>
-                    <p id="totalMoney">0</p>
+                    <h3>Total Soldiers</h3>
+                    <p id="totalSoldiers">0</p>
                 </div>
                 <div class="stat-card">
-                    <h3>Total XP</h3>
-                    <p id="totalXP">0</p>
+                    <h3>Total Missions</h3>
+                    <p id="totalMissions">0</p>
                 </div>
                 <div class="stat-card">
-                    <h3>Resource Generation</h3>
-                    <p id="resourceGeneration">10</p>
+                    <h3>Total Resources</h3>
+                    <p id="totalResources">0</p>
                 </div>
-                <div class="stat-card">
-                    <h3>Current Rank</h3>
-                    <div class="rank-box">
-                        <p id="currentRank">Private</p>
-                    </div>
-                </div>
-                <div class="stat-card">
-                    <h3>Units</h3>
-                    <p>Soldiers: <span id="soldierCount">0</span></p>
-                    <p>Tanks: <span id="tankCount">0</span></p>
-                    <p>Helicopters: <span id="helicopterCount">0</span></p>
-                </div>
-            </div>
-            <div id="ongoingMissions">
-                <h3>Ongoing Missions</h3>
-                <ul id="missionList"></ul>
-            </div>
-            <div id="recentAchievements">
-                <h3>Recent Achievements</h3>
-                <ul id="achievementList"></ul>
             </div>
         </section>
-        
+
+        <!-- Missions Section -->
         <section id="missions" class="section">
             <h2>Missions</h2>
+            <p>Send your army on various missions to gather resources and gain experience.</p>
             <div class="mission-grid">
-                <div class="mission-card" onclick="startMission('Training Exercise', 10, 5, 5)">
-                    <h3>Training Exercise</h3>
-                    <p>Reward: 10 Money, 5 XP</p>
-                    <p>Duration: 5 minutes</p>
+                <div class="mission-card" onclick="startMission('scouting')">
+                    <h3>Scouting</h3>
+                    <p>Low risk, quick return.</p>
                 </div>
-                <div class="mission-card" onclick="startMission('Field Mission', 20, 10, 10)">
-                    <h3>Field Mission</h3>
-                    <p>Reward: 20 Money, 10 XP</p>
-                    <p>Duration: 10 minutes</p>
+                <div class="mission-card" onclick="startMission('patrol')">
+                    <h3>Patrol</h3>
+                    <p>Medium risk, moderate reward.</p>
                 </div>
-                <div class="mission-card" onclick="startMission('Special Operation', 50, 25, 15)">
-                    <h3>Special Operation</h3>
-                    <p>Reward: 50 Money, 25 XP</p>
-                    <p>Duration: 15 minutes</p>
-                </div>
-            </div>
-            <div id="missionModal" class="modal">
-                <div class="modal-content">
-                    <span class="close" onclick="closeModal('missionModal')">&times;</span>
-                    <h2 id="missionTitle"></h2>
-                    <p id="missionDescription"></p>
-                    <p id="missionRewards"></p>
-                    <p id="missionCountdown"></p>
+                <div class="mission-card" onclick="startMission('invasion')">
+                    <h3>Invasion</h3>
+                    <p>High risk, high reward.</p>
                 </div>
             </div>
         </section>
 
+        <!-- Crafting Section -->
         <section id="crafting" class="section">
-            <h2>CRAFTING</h2>
+            <h2>Crafting</h2>
+            <p>Use gathered resources to craft new items and equipment for your army.</p>
             <div class="crafting-grid">
-                <div class="crafting-card" onclick="craftItem('Soldier', 10)">
-                    <img src="soldier.png" alt="Soldier">
-                    <h3>Craft Soldier</h3>
-                    <p>Cost: 10 Money</p>
+                <div class="crafting-card">
+                    <img src="https://via.placeholder.com/80" alt="Sword">
+                    <h3>Sword</h3>
+                    <p>Cost: 10 Steel</p>
                 </div>
-                <div class="crafting-card" onclick="craftItem('Tank', 50)">
-                    <img src="tank.png" alt="Tank">
-                    <h3>Craft Tank</h3>
-                    <p>Cost: 50 Money</p>
+                <div class="crafting-card">
+                    <img src="https://via.placeholder.com/80" alt="Shield">
+                    <h3>Shield</h3>
+                    <p>Cost: 15 Steel</p>
                 </div>
-                <div class="crafting-card" onclick="craftItem('Helicopter', 100)">
-                    <img src="helicopter.png" alt="Helicopter">
-                    <h3>Craft Helicopter</h3>
-                    <p>Cost: 100 Money</p>
-                </div>
-                <div class="crafting-card" onclick="craftItem('Sniper Team', 200)">
-                    <img src="sniper_team.png" alt="Sniper Team">
-                    <h3>Craft Sniper Team</h3>
-                    <p>Cost: 200 Money</p>
-                </div>
-                <div class="crafting-card" onclick="craftItem('Medic Unit', 300)">
-                    <img src="medic_unit.png" alt="Medic Unit">
-                    <h3>Craft Medic Unit</h3>
-                    <p>Cost: 300 Money</p>
-                </div>
-                <div class="crafting-card" onclick="craftItem('Artillery', 500)">
-                    <img src="artillery.png" alt="Artillery">
-                    <h3>Craft Artillery</h3>
-                    <p>Cost: 500 Money</p>
-                </div>
-                <div class="crafting-card" onclick="craftItem('Drone', 800)">
-                    <img src="drone.png" alt="Drone">
-                    <h3>Craft Drone</h3>
-                    <p>Cost: 800 Money</p>
-                </div>
-                <div class="crafting-card" onclick="craftItem('Naval Ship', 1200)">
-                    <img src="naval_ship.png" alt="Naval Ship">
-                    <h3>Craft Naval Ship</h3>
-                    <p>Cost: 1,200 Money</p>
-                </div>
-                <div class="crafting-card" onclick="craftItem('Submarine', 1500)">
-                    <img src="submarine.png" alt="Submarine">
-                    <h3>Craft Submarine</h3>
-                    <p>Cost: 1,500 Money</p>
-                </div>
-                <div class="crafting-card" onclick="craftItem('Heavy Tank', 1800)">
-                    <img src="heavy_tank.png" alt="Heavy Tank">
-                    <h3>Craft Heavy Tank</h3>
-                    <p>Cost: 1,800 Money</p>
-                </div>
-                <div class="crafting-card" onclick="craftItem('Jet Fighter', 2000)">
-                    <img src="jet_fighter.png" alt="Jet Fighter">
-                    <h3>Craft Jet Fighter</h3>
-                    <p>Cost: 2,000 Money</p>
-                </div>
-                <div class="crafting-card" onclick="craftItem('Missile Launcher', 2500)">
-                    <img src="missile_launcher.png" alt="Missile Launcher">
-                    <h3>Craft Missile Launcher</h3>
-                    <p>Cost: 2,500 Money</p>
-                </div>
-                <div class="crafting-card" onclick="craftItem('Stealth Bomber', 3000)">
-                    <img src="stealth_bomber.png" alt="Stealth Bomber">
-                    <h3>Craft Stealth Bomber</h3>
-                    <p>Cost: 3,000 Money</p>
+                <div class="crafting-card">
+                    <img src="https://via.placeholder.com/80" alt="Armor">
+                    <h3>Armor</h3>
+                    <p>Cost: 20 Steel</p>
                 </div>
             </div>
-        </section>        
+        </section>
 
+        <!-- Combat Section -->
+        <section id="combat" class="section">
+            <h2>Combat</h2>
+            <p>Prepare your army for combat. Upgrade units and test their strength in battle.</p>
+            <div class="combat-overview">
+                <p>Total Combat Power: <span id="totalPower">0</span></p>
+            </div>
+            <div class="combat-actions">
+                <div class="combat-unit">
+                    <h3>Infantry</h3>
+                    <button onclick="trainUnit('infantry')">Train Infantry</button>
+                </div>
+                <div class="combat-unit">
+                    <h3>Archers</h3>
+                    <button onclick="trainUnit('archers')">Train Archers</button>
+                </div>
+                <div class="combat-unit">
+                    <h3>Cavalry</h3>
+                    <button onclick="trainUnit('cavalry')">Train Cavalry</button>
+                </div>
+            </div>
+            <div class="combat-result" id="combatResult">
+                <!-- Combat results will be shown here -->
+            </div>
+        </section>
+
+        <!-- Research Section -->
         <section id="research" class="section">
             <h2>Research</h2>
-            <div class="item" onclick="researchItem('Infantry Training', 20)">Infantry Training - Cost: 20 XP</div>
-            <div class="item" onclick="researchItem('Advanced Weaponry', 50)">Advanced Weaponry - Cost: 50 XP</div>
-            <div class="item" onclick="researchItem('Vehicle Armor', 30)">Vehicle Armor - Cost: 30 XP</div>
-            <div class="item" onclick="researchItem('Aviation Technology', 70)">Aviation Technology - Cost: 70 XP</div>
-            <div class="item" onclick="researchItem('Drone Technology', 100)">Drone Technology - Cost: 100 XP</div>
-            <div class="item" onclick="researchItem('Cyber Warfare', 150)">Cyber Warfare - Cost: 150 XP</div>
-        </section>  
-
-        <section id="barracks" class="section">
-            <h2 class="section-header">BARRACKS</h2>
-            <div class="barracks-grid">
-                <div class="barracks-card" id="barracksSoldier">
-                    <h3>Soldiers</h3>
-                    <p>Count: <span id="soldierCount">0</span></p>
-                    <p>Power: <span id="soldierPower">10</span></p>
-                    <p>Upgrade: <span id="soldierUpgradeCost">10</span> XP</p>
+            <p>Invest in research to unlock new technologies and improve your army's capabilities.</p>
+            <div class="research-list">
+                <div class="item" onclick="startResearch('strategy')">
+                    Research Strategy - Cost: 100 Gold
                 </div>
-                <div class="barracks-card" id="barracksTank">
-                    <h3>Tanks</h3>
-                    <p>Count: <span id="tankCount">0</span></p>
-                    <p>Power: <span id="tankPower">50</span></p>
-                    <p>Upgrade: <span id="tankUpgradeCost">30</span> XP</p>
+                <div class="item" onclick="startResearch('armor')">
+                    Research Armor - Cost: 150 Gold
                 </div>
-                <div class="barracks-card" id="barracksHelicopter">
-                    <h3>Helicopters</h3>
-                    <p>Count: <span id="helicopterCount">0</span></p>
-                    <p>Power: <span id="helicopterPower">100</span></p>
-                    <p>Upgrade: <span id="helicopterUpgradeCost">50</span> XP</p>
-                </div>
-                <div class="barracks-card" id="barracksArtillery">
-                    <h3>Artillery</h3>
-                    <p>Count: <span id="artilleryCount">0</span></p>
-                    <p>Power: <span id="artilleryPower">500</span></p>
-                    <p>Upgrade: <span id="artilleryUpgradeCost">250</span> XP</p>
-                </div>
-                <div class="barracks-card" id="barracksDrone">
-                    <h3>Drone</h3>
-                    <p>Count: <span id="droneCount">0</span></p>
-                    <p>Power: <span id="dronePower">800</span></p>
-                    <p>Upgrade: <span id="droneUpgradeCost">400</span> XP</p>
-                </div>
-                <div class="barracks-card" id="barracksNavalShip">
-                    <h3>Naval Ship</h3>
-                    <p>Count: <span id="navalShipCount">0</span></p>
-                    <p>Power: <span id="navalShipPower">1200</span></p>
-                    <p>Upgrade: <span id="navalShipUpgradeCost">600</span> XP</p>
-                </div>
-                <div class="barracks-card" id="barracksSubmarine">
-                    <h3>Submarine</h3>
-                    <p>Count: <span id="submarineCount">0</span></p>
-                    <p>Power: <span id="submarinePower">1500</span></p>
-                    <p>Upgrade: <span id="submarineUpgradeCost">750</span> XP</p>
-                </div>
-                <div class="barracks-card" id="barracksJetFighter">
-                    <h3>Jet Fighter</h3>
-                    <p>Count: <span id="jetFighterCount">0</span></p>
-                    <p>Power: <span id="jetFighterPower">2000</span></p>
-                    <p>Upgrade: <span id="jetFighterUpgradeCost">1000</span> XP</p>
-                </div>
-                <div class="barracks-card" id="barracksMissileLauncher">
-                    <h3>Missile Launcher</h3>
-                    <p>Count: <span id="missileLauncherCount">0</span></p>
-                    <p>Power: <span id="missileLauncherPower">2500</span></p>
-                    <p>Upgrade: <span id="missileLauncherUpgradeCost">1250</span> XP</p>
-                </div>
-                <div class="barracks-card" id="barracksSniperTeam">
-                    <h3>Sniper Team</h3>
-                    <p>Count: <span id="sniperTeamCount">0</span></p>
-                    <p>Power: <span id="sniperTeamPower">3000</span></p>
-                    <p>Upgrade: <span id="sniperTeamUpgradeCost">1500</span> XP</p>
-                </div>
-                <div class="barracks-card" id="barracksMedicUnit">
-                    <h3>Medic Unit</h3>
-                    <p>Count: <span id="medicUnitCount">0</span></p>
-                    <p>Power: <span id="medicUnitPower">3500</span></p>
-                    <p>Upgrade: <span id="medicUnitUpgradeCost">1750</span> XP</p>
-                </div>
-                <div class="barracks-card" id="barracksHeavyTank">
-                    <h3>Heavy Tank</h3>
-                    <p>Count: <span id="heavyTankCount">0</span></p>
-                    <p>Power: <span id="heavyTankPower">4000</span></p>
-                    <p>Upgrade: <span id="heavyTankUpgradeCost">2000</span> XP</p>
-                </div>
-                <div class="barracks-card" id="barracksStealthBomber">
-                    <h3>Stealth Bomber</h3>
-                    <p>Count: <span id="stealthBomberCount">0</span></p>
-                    <p>Power: <span id="stealthBomberPower">4500</span></p>
-                    <p>Upgrade: <span id="stealthBomberUpgradeCost">2250</span> XP</p>
-                </div>
-            </div>
-            <div class="barracks-upgrade">
-                <div class="item pulsing" onclick="upgradeUnit('Soldier')">Upgrade Soldiers - Cost: <span id="soldierUpgradeCost">10</span> XP</div>
-                <div class="item pulsing" onclick="upgradeUnit('Tank')">Upgrade Tanks - Cost: <span id="tankUpgradeCost">30</span> XP</div>
-                <div class="item pulsing" onclick="upgradeUnit('Helicopter')">Upgrade Helicopters - Cost: <span id="helicopterUpgradeCost">50</span> XP</div>
-                <div class="item pulsing" onclick="upgradeUnit('Artillery')">Upgrade Artillery - Cost: <span id="artilleryUpgradeCost">250</span> XP</div>
-                <div class="item pulsing" onclick="upgradeUnit('Drone')">Upgrade Drones - Cost: <span id="droneUpgradeCost">400</span> XP</div>
-                <div class="item pulsing" onclick="upgradeUnit('Naval Ship')">Upgrade Naval Ships - Cost: <span id="navalShipUpgradeCost">600</span> XP</div>
-                <div class="item pulsing" onclick="upgradeUnit('Submarine')">Upgrade Submarines - Cost: <span id="submarineUpgradeCost">750</span> XP</div>
-                <div class="item pulsing" onclick="upgradeUnit('Jet Fighter')">Upgrade Jet Fighters - Cost: <span id="jetFighterUpgradeCost">1000</span> XP</div>
-                <div class="item pulsing" onclick="upgradeUnit('Missile Launcher')">Upgrade Missile Launchers - Cost: <span id="missileLauncherUpgradeCost">1250</span> XP</div>
-                <div class="item pulsing" onclick="upgradeUnit('Sniper Team')">Upgrade Sniper Teams - Cost: <span id="sniperTeamUpgradeCost">1500</span> XP</div>
-                <div class="item pulsing" onclick="upgradeUnit('Medic Unit')">Upgrade Medic Units - Cost: <span id="medicUnitUpgradeCost">1750</span> XP</div>
-                <div class="item pulsing" onclick="upgradeUnit('Heavy Tank')">Upgrade Heavy Tanks - Cost: <span id="heavyTankUpgradeCost">2000</span> XP</div>
-                <div class="item pulsing" onclick="upgradeUnit('Stealth Bomber')">Upgrade Stealth Bombers - Cost: <span id="stealthBomberUpgradeCost">2250</span> XP</div>
-            </div>
-        </section>
-
-        <section id="combat" class="section">
-            <h2>COMBAT</h2>
-            <div id="combatOverview" class="combat-overview">
-                <h3>Current Units</h3>
-                <p>Soldiers: <span id="currentSoldiers">0</span></p>
-                <p>Tanks: <span id="currentTanks">0</span></p>
-                <p>Helicopters: <span id="currentHelicopters">0</span></p>
-                <p>Total Power: <span id="totalPower">0</span></p>
-            </div>
-            
-            <div class="combat-actions">
-                <h3>Engage in Combat</h3>
-                <div class="combat-unit" onclick="engageCombat('Soldiers', 10, 50)">
-                    <p>Soldiers</p>
-                    <p>Power: 10</p>
-                    <button>Engage</button>
-                </div>
-                <div class="combat-unit" onclick="engageCombat('Tanks', 50, 100)">
-                    <p>Tanks</p>
-                    <p>Power: 50</p>
-                    <button>Engage</button>
-                </div>
-                <div class="combat-unit" onclick="engageCombat('Helicopters', 100, 200)">
-                    <p>Helicopters</p>
-                    <p>Power: 100</p>
-                    <button>Engage</button>
-                </div>
-            </div>
-            <div id="combatResult" class="combat-result">
-                <!-- Results of the combat will be displayed here -->
-            </div>
-        </section>
-
-        <section id="economy" class="section">
-            <h2>ECONOMY</h2>
-            <div class="economy-grid">
-                <div class="economy-card">
-                    <h3>Total Money</h3>
-                    <p id="totalMoney">0</p>
-                </div>
-                <div class="economy-card">
-                    <h3>Total XP</h3>
-                    <p id="totalXP">0</p>
-                </div>
-                <div class="economy-card">
-                    <h3>Resource Generation</h3>
-                    <p>Cost: 100 XP</p>
-                    <button class="economy-button" onclick="upgradeEconomy('Resource Generation', 100)">Upgrade</button>
-                </div>
-                <div class="economy-card">
-                    <h3>Advanced Logistics</h3>
-                    <p>Cost: 200 XP</p>
-                    <button class="economy-button" onclick="upgradeEconomy('Advanced Logistics', 200)">Upgrade</button>
-                </div>
-                <div class="economy-card">
-                    <h3>Financial Management</h3>
-                    <p>Cost: 300 XP</p>
-                    <button class="economy-button" onclick="upgradeEconomy('Financial Management', 300)">Upgrade</button>
+                <div class="item" onclick="startResearch('weaponry')">
+                    Research Weaponry - Cost: 200 Gold
                 </div>
             </div>
         </section>
 
-
-
-
-
-        
-
-        <section id="ranks" class="section active">
+        <!-- Ranks Section -->
+        <section id="ranks" class="section">
             <h2>Ranks</h2>
+            <p>Achieve higher ranks by completing missions and gaining experience.</p>
             <div class="ranks-grid">
-                <div class="rank-card" onclick="showRankDetails('Private')">
+                <div class="rank-card" onclick="showRankInfo('Private')">
                     <h3>Private</h3>
                 </div>
-                <div class="rank-card" onclick="showRankDetails('Private Second Class')">
-                    <h3>Private Second Class</h3>
-                </div>
-                <div class="rank-card" onclick="showRankDetails('Private First Class')">
-                    <h3>Private First Class</h3>
-                </div>
-                <div class="rank-card" onclick="showRankDetails('Specialist')">
-                    <h3>Specialist</h3>
-                </div>
-                <div class="rank-card" onclick="showRankDetails('Corporal')">
+                <div class="rank-card" onclick="showRankInfo('Corporal')">
                     <h3>Corporal</h3>
                 </div>
-                <div class="rank-card" onclick="showRankDetails('Sergeant')">
+                <div class="rank-card" onclick="showRankInfo('Sergeant')">
                     <h3>Sergeant</h3>
                 </div>
-                <div class="rank-card" onclick="showRankDetails('Staff Sergeant')">
-                    <h3>Staff Sergeant</h3>
+                <div class="rank-card" onclick="showRankInfo('Lieutenant')">
+                    <h3>Lieutenant</h3>
                 </div>
-                <div class="rank-card" onclick="showRankDetails('Sergeant First Class')">
-                    <h3>Sergeant First Class</h3>
-                </div>
-                <div class="rank-card" onclick="showRankDetails('Master Sergeant')">
-                    <h3>Master Sergeant</h3>
-                </div>
-                <div class="rank-card" onclick="showRankDetails('First Sergeant')">
-                    <h3>First Sergeant</h3>
-                </div>
-                <div class="rank-card" onclick="showRankDetails('Sergeant Major')">
-                    <h3>Sergeant Major</h3>
-                </div>
-                <div class="rank-card" onclick="showRankDetails('Command Sergeant Major')">
-                    <h3>Command Sergeant Major</h3>
-                </div>
-                <div class="rank-card" onclick="showRankDetails('Sergeant Major of the Army')">
-                    <h3>Sergeant Major of the Army</h3>
-                </div>
-                <div class="rank-card" onclick="showRankDetails('Second Lieutenant')">
-                    <h3>Second Lieutenant</h3>
-                </div>
-                <div class="rank-card" onclick="showRankDetails('First Lieutenant')">
-                    <h3>First Lieutenant</h3>
-                </div>
-                <div class="rank-card" onclick="showRankDetails('Captain')">
+                <div class="rank-card" onclick="showRankInfo('Captain')">
                     <h3>Captain</h3>
                 </div>
-                <div class="rank-card" onclick="showRankDetails('Major')">
+                <div class="rank-card" onclick="showRankInfo('Major')">
                     <h3>Major</h3>
                 </div>
-                <div class="rank-card" onclick="showRankDetails('Lieutenant Colonel')">
-                    <h3>Lieutenant Colonel</h3>
+            </div>
+
+            <!-- Rank Information Details -->
+            <div id="rank-info-container">
+                <div class="rank-info" id="rank-info-Private">
+                    <h3>Private</h3>
+                    <p>The starting rank in your army. Build your experience to advance to higher ranks.</p>
+                    <div class="stats">
+                        <p><span class="highlight">Responsibilities:</span> Basic soldier duties.</p>
+                        <p><span class="highlight">Pay Grade:</span> E-1</p>
+                        <p><span class="pay-grade" onclick="showPayGradeDetails('E-1')">More about Pay Grade E-1</span></p>
+                    </div>
                 </div>
-                <div class="rank-card" onclick="showRankDetails('Colonel')">
-                    <h3>Colonel</h3>
+                <div class="rank-info" id="rank-info-Corporal">
+                    <h3>Corporal</h3>
+                    <p>Second rank in your army. Corporals have more responsibilities and lead small groups of soldiers.</p>
+                    <div class="stats">
+                        <p><span class="highlight">Responsibilities:</span> Leading small units.</p>
+                        <p><span class="highlight">Pay Grade:</span> E-4</p>
+                        <p><span class="pay-grade" onclick="showPayGradeDetails('E-4')">More about Pay Grade E-4</span></p>
+                    </div>
                 </div>
-                <div class="rank-card" onclick="showRankDetails('Brigadier General')">
-                    <h3>Brigadier General</h3>
+                <div class="rank-info" id="rank-info-Sergeant">
+                    <h3>Sergeant</h3>
+                    <p>Sergeants are experienced leaders responsible for guiding and training soldiers under their command.</p>
+                    <div class="stats">
+                        <p><span class="highlight">Responsibilities:</span> Training and leading squads.</p>
+                        <p><span class="highlight">Pay Grade:</span> E-5</p>
+                        <p><span class="pay-grade" onclick="showPayGradeDetails('E-5')">More about Pay Grade E-5</span></p>
+                    </div>
                 </div>
-                <div class="rank-card" onclick="showRankDetails('Major General')">
-                    <h3>Major General</h3>
+                <div class="rank-info" id="rank-info-Lieutenant">
+                    <h3>Lieutenant</h3>
+                    <p>Lieutenants are junior officers who command platoons or lead specialized teams within the army.</p>
+                    <div class="stats">
+                        <p><span class="highlight">Responsibilities:</span> Commanding platoons.</p>
+                        <p><span class="highlight">Pay Grade:</span> O-1</p>
+                        <p><span class="pay-grade" onclick="showPayGradeDetails('O-1')">More about Pay Grade O-1</span></p>
+                    </div>
                 </div>
-                <div class="rank-card" onclick="showRankDetails('Lieutenant General')">
-                    <h3>Lieutenant General</h3>
+                <div class="rank-info" id="rank-info-Captain">
+                    <h3>Captain</h3>
+                    <p>Captains are mid-level officers responsible for larger units or serving as staff officers in high-level command.</p>
+                    <div class="stats">
+                        <p><span class="highlight">Responsibilities:</span> Leading larger units or serving in staff roles.</p>
+                        <p><span class="highlight">Pay Grade:</span> O-3</p>
+                        <p><span class="pay-grade" onclick="showPayGradeDetails('O-3')">More about Pay Grade O-3</span></p>
+                    </div>
                 </div>
-                <div class="rank-card" onclick="showRankDetails('General')">
-                    <h3>General</h3>
-                </div>
-                <div class="rank-card" onclick="showRankDetails('General of the Army')">
-                    <h3>General of the Army</h3>
+                <div class="rank-info" id="rank-info-Major">
+                    <h3>Major</h3>
+                    <p>Majors are senior officers responsible for commanding larger formations or key departments within the army.</p>
+                    <div class="stats">
+                        <p><span class="highlight">Responsibilities:</span> Commanding large formations or departments.</p>
+                        <p><span class="highlight">Pay Grade:</span> O-4</p>
+                        <p><span class="pay-grade" onclick="showPayGradeDetails('O-4')">More about Pay Grade O-4</span></p>
+                    </div>
                 </div>
             </div>
-            <div id="rankInfo" class="rank-info"></div>
         </section>
-        
-
-
-
-
-        
     </main>
 
-    <footer>
-        &copy; 2024 Army Incremental
-    </footer>
-
-    <!-- Modal for Mission Completion -->
-    <div id="completionModal" class="modal">
+    <!-- Modal for Pay Grade Details -->
+    <div id="pay-grade-modal" class="modal">
         <div class="modal-content">
-            <span class="close" onclick="closeModal('completionModal')">&times;</span>
-            <h2 id="completionTitle"></h2>
-            <p id="completionMessage"></p>
-            <button id="claimRewardButton" onclick="claimMissionReward()">Claim Reward</button>
+            <span class="close-modal" onclick="closeModal()">&times;</span>
+            <h2 class="modal-header">Pay Grade Details</h2>
+            <div class="modal-body" id="modal-body">
+                <!-- Pay grade details will be dynamically loaded here -->
+            </div>
+            <button class="modal-button" onclick="closeModal()">Close</button>
         </div>
     </div>
 
-    <script src="app.js"></script>
+    <script>
+        // JavaScript for interactive functionality
 
-    <!-- Success Popup -->
-    <div id="successPopup" class="popup-modal">
-        <h2>Action Successful!</h2>
-        <p>Your action has been completed successfully.</p>
-        <button class="close-button" onclick="closePopup('successPopup')">Close</button>
-    </div>
+        // Handle navigation click events
+        document.querySelectorAll('.nav-link').forEach(link => {
+            link.addEventListener('click', (e) => {
+                e.preventDefault();
+                document.querySelectorAll('.section').forEach(section => section.classList.remove('active'));
+                document.querySelectorAll('.nav-link').forEach(nav => nav.classList.remove('active'));
+                document.getElementById(link.dataset.section).classList.add('active');
+                link.classList.add('active');
+            });
+        });
 
-    <!-- Failure Popup -->
-    <div id="failurePopup" class="popup-modal">
-        <h2>Action Failed</h2>
-        <p>You do not have enough resources to perform this action.</p>
-        <button class="close-button" onclick="closePopup('failurePopup')">Close</button>
-    </div>
+        // Simulated functions for missions, crafting, and combat (placeholders)
+        function startMission(type) {
+            alert(`Starting ${type} mission!`);
+            // Add mission logic here
+        }
 
-    <div id="combatPopup" class="combat-popup">
-        <div class="combat-popup-content">
-            <span class="close" onclick="closeCombatPopup()">&times;</span>
-            <h2>Combat Engaged!</h2>
-            <div class="combat-status">
-                <div class="combat-life-bar">
-                    <div id="playerLifeBar" class="life-bar-fill player"></div>
-                </div>
-                <p>Player</p>
-            </div>
-            <div class="combat-status">
-                <div class="combat-life-bar">
-                    <div id="enemyLifeBar" class="life-bar-fill enemy"></div>
-                </div>
-                <p>Enemy</p>
-            </div>
-            <div id="combatResultMessage" class="combat-result-message"></div>
-            <div id="troopsLostMessage" class="troops-lost-message"></div>
-        </div>
-    </div>
+        function trainUnit(type) {
+            alert(`Training ${type}!`);
+            // Add training logic here
+        }
 
+        function startResearch(type) {
+            alert(`Starting research on ${type}!`);
+            // Add research logic here
+        }
 
+        // Show rank information details
+        function showRankInfo(rank) {
+            document.querySelectorAll('.rank-info').forEach(info => info.style.display = 'none');
+            document.getElementById(`rank-info-${rank}`).style.display = 'block';
+        }
 
-<!-- Modal for Pay Grade Details -->
-<div id="payGradeModal" class="modal">
-    <div class="modal-content">
-        <span class="close" onclick="closeModal()">&times;</span>
-        <h3 id="payGradeTitle"></h3>
-        <p id="payGradeDescription"></p>
-        <p id="payGradeSalary"></p>
-        <p id="payGradeRequirements"></p>
-    </div>
-</div>
+        // Modal handling for pay grade details
+        function showPayGradeDetails(payGrade) {
+            const modal = document.getElementById('pay-grade-modal');
+            const modalBody = document.getElementById('modal-body');
+            modalBody.innerHTML = `<p>Details about Pay Grade ${payGrade} will be shown here.</p>`;
+            modal.style.display = 'flex';
+        }
 
-<div id="myModal" class="modal">
-    <div class="modal-content">
-      <span class="close">&times;</span>
-      <!-- Modal content here -->
-      <button id="claimRewardButton">Claim Reward</button>
-    </div>
-  </div>
-  
-  <button onclick="showPopup('craftingPopup')">Show Crafting Popup</button>
-  <div id="craftingPopup" class="popup-modal">
-    <h2>Crafting</h2>
-    <p>Crafting details or message here.</p>
-    <button class="close-button" onclick="closePopupById('craftingPopup')">Close</button>
-</div>
+        function closeModal() {
+            document.getElementById('pay-grade-modal').style.display = 'none';
+        }
 
-<button onclick="showPopup('researchPopup')">Show research Popup</button>
-  <div id="researchPopup" class="popup-modal">
-    <h2>Research</h2>
-    <p>Crafting details or message here.</p>
-    <button class="close-button" onclick="closePopupById('researchPopup')">Close</button>
-</div>
-
-<!-- Custom Popup for Error Messages -->
-<div id="errorPopup" class="popup-modal">
-    <h2>Action Failed</h2>
-    <p id="errorMessage">You do not have enough resources to perform this action.</p>
-    <button class="close-button" onclick="closePopupById('errorPopup')">Close</button>
-</div>
-
-<footer>
-    <p>&copy; 2024 Army Incremental</p>
-    <button onclick="showPopup('craftingPopup')">Show Crafting Popup</button>
-    <button onclick="showPopup('researchPopup')">Show Research Popup</button>
-</footer>
-
-<!-- Custom Popups -->
-<div id="craftingPopup" class="custom-popup">
-    <div class="popup-content">
-        <h2>Crafting Alert</h2>
-        <p id="craftingPopupText">You don't have enough money to craft this item.</p>
-        <button onclick="closePopup('craftingPopup')">Close</button>
-    </div>
-</div>
-
-<div id="researchPopup" class="custom-popup">
-    <div class="popup-content">
-        <h2>Research Alert</h2>
-        <p id="researchPopupText">You don't have enough XP to start this research.</p>
-        <button onclick="closePopup('researchPopup')">Close</button>
-    </div>
-</div>
-
-<div id="missionPopup" class="custom-popup">
-    <div class="popup-content">
-        <h2>Mission Alert</h2>
-        <p id="missionPopupText">You don't have enough resources for this mission.</p>
-        <button onclick="closePopup('missionPopup')">Close</button>
-    </div>
-</div>
-
+        // Close modal if user clicks outside of it
+        window.onclick = function(event) {
+            const modal = document.getElementById('pay-grade-modal');
+            if (event.target === modal) {
+                modal.style.display = 'none';
+            }
+        }
+    </script>
 </body>
 </html>
