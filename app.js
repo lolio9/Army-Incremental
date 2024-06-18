@@ -198,6 +198,22 @@ function updateMissionList() {
     }
 }
 
+// Function to show a custom error popup
+function showErrorPopup(message) {
+    const errorPopup = document.getElementById('errorPopup');
+    const errorMessage = document.getElementById('errorMessage');
+    errorMessage.innerText = message;
+    errorPopup.style.display = 'block';
+}
+
+// Function to close the popup by ID
+function closePopupById(popupId) {
+    const popup = document.getElementById(popupId);
+    if (popup) {
+        popup.style.display = 'none';
+    }
+}
+
 function craftItem(item, cost) {
     if (money >= cost) {
         money -= cost;
@@ -247,7 +263,7 @@ function craftItem(item, cost) {
         alert(`Crafted: ${item}`);
         updateResources();
     } else {
-        alert('Not enough money!');
+        showErrorPopup('Not enough money to craft this item.');
     }
 }
 
@@ -860,6 +876,21 @@ function showModal(modalId) {
 }
 
 
+// Function to show a custom error popup
+function showErrorPopup(message) {
+    const errorPopup = document.getElementById('errorPopup');
+    const errorMessage = document.getElementById('errorMessage');
+    errorMessage.innerText = message;
+    errorPopup.style.display = 'block';
+}
+
+// Function to close the popup by ID
+function closePopupById(popupId) {
+    const popup = document.getElementById(popupId);
+    if (popup) {
+        popup.style.display = 'none';
+    }
+}
 
 // Start the game
 updateResources();

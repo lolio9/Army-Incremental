@@ -547,8 +547,8 @@ p {
     cursor: pointer;
 }
 
-/* Style for popups */
-.popup-modal, .modal {
+/* Custom Popup Styling */
+.popup-modal {
     display: none; /* Hide by default */
     position: fixed; /* Stay in place */
     z-index: 1000; /* Sit on top */
@@ -568,7 +568,7 @@ p {
 }
 
 /* Popup header */
-.popup-modal h2, .modal h2 {
+.popup-modal h2 {
     font-size: 1.5rem;
     color: #00ff44; /* Bright green text */
     margin: 0 0 10px 0;
@@ -577,13 +577,13 @@ p {
 }
 
 /* Popup message */
-.popup-modal p, .modal p {
+.popup-modal p {
     font-size: 1.2rem;
     margin: 10px 0;
 }
 
 /* Close button styles */
-.popup-modal .close, .modal .close, .popup-modal .close-button {
+.popup-modal .close-button {
     background-color: #4CAF50; /* Bright green background */
     border: none;
     color: #000; /* Black text */
@@ -594,28 +594,14 @@ p {
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
 }
 
-.popup-modal .close:hover, .modal .close:hover, .popup-modal .close-button:hover {
+.popup-modal .close-button:hover {
     background-color: #45a049; /* Darker green on hover */
     transform: scale(1.05);
 }
 
-.popup-modal .close:active, .modal .close:active, .popup-modal .close-button:active {
+.popup-modal .close-button:active {
     background-color: #3e8e41; /* Even darker green on active */
     transform: scale(0.95);
-}
-
-/* Position close button in top-right corner for modals */
-.modal .close {
-    position: absolute;
-    top: 10px;
-    right: 10px;
-    font-size: 20px;
-    color: #fff; /* White color for X button */
-    cursor: pointer;
-}
-
-.modal .close:hover {
-    color: #f00; /* Red color on hover */
 }
 
 /* Animation for popups */
@@ -623,6 +609,7 @@ p {
     from { opacity: 0; }
     to { opacity: 1; }
 }
+
 
 
 
