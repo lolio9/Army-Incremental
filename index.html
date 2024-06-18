@@ -8,7 +8,6 @@
     <link rel="stylesheet" href="styles.css">
 </head>
 <body>
-
     <header>
         <h1>Army Incremental</h1>
         <div id="rank">Rank: Private</div>
@@ -185,19 +184,19 @@
             <div class="barracks-grid">
                 <div class="barracks-card" id="barracksSoldier">
                     <h3>Soldiers</h3>
-                    <p>Count: <span id="soldierCount">0</span></p>
+                    <p>Count: <span id="soldierCountBarracks">0</span></p>
                     <p>Power: <span id="soldierPower">10</span></p>
                     <p>Upgrade: <span id="soldierUpgradeCost">10</span> XP</p>
                 </div>
                 <div class="barracks-card" id="barracksTank">
                     <h3>Tanks</h3>
-                    <p>Count: <span id="tankCount">0</span></p>
+                    <p>Count: <span id="tankCountBarracks">0</span></p>
                     <p>Power: <span id="tankPower">50</span></p>
                     <p>Upgrade: <span id="tankUpgradeCost">30</span> XP</p>
                 </div>
                 <div class="barracks-card" id="barracksHelicopter">
                     <h3>Helicopters</h3>
-                    <p>Count: <span id="helicopterCount">0</span></p>
+                    <p>Count: <span id="helicopterCountBarracks">0</span></p>
                     <p>Power: <span id="helicopterPower">100</span></p>
                     <p>Upgrade: <span id="helicopterUpgradeCost">50</span> XP</p>
                 </div>
@@ -317,11 +316,11 @@
             <div class="economy-grid">
                 <div class="economy-card">
                     <h3>Total Money</h3>
-                    <p id="totalMoney">0</p>
+                    <p id="totalMoneyEconomy">0</p>
                 </div>
                 <div class="economy-card">
                     <h3>Total XP</h3>
-                    <p id="totalXP">0</p>
+                    <p id="totalXPEconomy">0</p>
                 </div>
                 <div class="economy-card">
                     <h3>Resource Generation</h3>
@@ -341,13 +340,7 @@
             </div>
         </section>
 
-
-
-
-
-        
-
-        <section id="ranks" class="section active">
+        <section id="ranks" class="section">
             <h2>Ranks</h2>
             <div class="ranks-grid">
                 <div class="rank-card" onclick="showRankDetails('Private')">
@@ -425,12 +418,6 @@
             </div>
             <div id="rankInfo" class="rank-info"></div>
         </section>
-        
-
-
-
-
-        
     </main>
 
     <footer>
@@ -447,8 +434,6 @@
         </div>
     </div>
 
-    <script src="app.js"></script>
-
     <!-- Success Popup -->
     <div id="successPopup" class="popup-modal">
         <h2>Action Successful!</h2>
@@ -463,6 +448,7 @@
         <button class="close-button" onclick="closePopup('failurePopup')">Close</button>
     </div>
 
+    <!-- Combat Popup -->
     <div id="combatPopup" class="combat-popup">
         <div class="combat-popup-content">
             <span class="close" onclick="closeCombatPopup()">&times;</span>
@@ -484,78 +470,52 @@
         </div>
     </div>
 
-
-
-<!-- Modal for Pay Grade Details -->
-<div id="payGradeModal" class="modal">
-    <div class="modal-content">
-        <span class="close" onclick="closeModal()">&times;</span>
-        <h3 id="payGradeTitle"></h3>
-        <p id="payGradeDescription"></p>
-        <p id="payGradeSalary"></p>
-        <p id="payGradeRequirements"></p>
+    <!-- Pay Grade Modal -->
+    <div id="payGradeModal" class="modal">
+        <div class="modal-content">
+            <span class="close" onclick="closeModal('payGradeModal')">&times;</span>
+            <h3 id="payGradeTitle"></h3>
+            <p id="payGradeDescription"></p>
+            <p id="payGradeSalary"></p>
+            <p id="payGradeRequirements"></p>
+        </div>
     </div>
-</div>
 
-<div id="myModal" class="modal">
-    <div class="modal-content">
-      <span class="close">&times;</span>
-      <!-- Modal content here -->
-      <button id="claimRewardButton">Claim Reward</button>
+    <!-- Generic Modal -->
+    <div id="myModal" class="modal">
+        <div class="modal-content">
+            <span class="close" onclick="closeModal('myModal')">&times;</span>
+            <button id="claimRewardButton" onclick="claimReward()">Claim Reward</button>
+        </div>
     </div>
-  </div>
-  
-  <button onclick="showPopup('craftingPopup')">Show Crafting Popup</button>
-  <div id="craftingPopup" class="popup-modal">
-    <h2>Crafting</h2>
-    <p>Crafting details or message here.</p>
-    <button class="close-button" onclick="closePopupById('craftingPopup')">Close</button>
-</div>
 
-<button onclick="showPopup('researchPopup')">Show research Popup</button>
-  <div id="researchPopup" class="popup-modal">
-    <h2>Research</h2>
-    <p>Crafting details or message here.</p>
-    <button class="close-button" onclick="closePopupById('researchPopup')">Close</button>
-</div>
-
-<!-- Custom Popup for Error Messages -->
-<div id="errorPopup" class="popup-modal">
-    <h2>Action Failed</h2>
-    <p id="errorMessage">You do not have enough resources to perform this action.</p>
-    <button class="close-button" onclick="closePopupById('errorPopup')">Close</button>
-</div>
-
-<footer>
-    <p>&copy; 2024 Army Incremental</p>
-    <button onclick="showPopup('craftingPopup')">Show Crafting Popup</button>
-    <button onclick="showPopup('researchPopup')">Show Research Popup</button>
-</footer>
-
-<!-- Custom Popups -->
-<div id="craftingPopup" class="custom-popup">
-    <div class="popup-content">
-        <h2>Crafting Alert</h2>
-        <p id="craftingPopupText">You don't have enough money to craft this item.</p>
-        <button onclick="closePopup('craftingPopup')">Close</button>
+    <!-- Custom Popup for Crafting -->
+    <div id="craftingPopup" class="custom-popup">
+        <div class="popup-content">
+            <h2>Crafting Alert</h2>
+            <p id="craftingPopupText">You don't have enough money to craft this item.</p>
+            <button class="close-button" onclick="closePopup('craftingPopup')">Close</button>
+        </div>
     </div>
-</div>
 
-<div id="researchPopup" class="custom-popup">
-    <div class="popup-content">
-        <h2>Research Alert</h2>
-        <p id="researchPopupText">You don't have enough XP to start this research.</p>
-        <button onclick="closePopup('researchPopup')">Close</button>
+    <!-- Custom Popup for Research -->
+    <div id="researchPopup" class="custom-popup">
+        <div class="popup-content">
+            <h2>Research Alert</h2>
+            <p id="researchPopupText">You don't have enough XP to start this research.</p>
+            <button class="close-button" onclick="closePopup('researchPopup')">Close</button>
+        </div>
     </div>
-</div>
 
-<div id="missionPopup" class="custom-popup">
-    <div class="popup-content">
-        <h2>Mission Alert</h2>
-        <p id="missionPopupText">You don't have enough resources for this mission.</p>
-        <button onclick="closePopup('missionPopup')">Close</button>
+    <!-- Custom Popup for Missions -->
+    <div id="missionPopup" class="custom-popup">
+        <div class="popup-content">
+            <h2>Mission Alert</h2>
+            <p id="missionPopupText">You don't have enough resources for this mission.</p>
+            <button class="close-button" onclick="closePopup('missionPopup')">Close</button>
+        </div>
     </div>
-</div>
 
+    <script src="app.js"></script>
 </body>
 </html>
