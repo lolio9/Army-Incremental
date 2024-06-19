@@ -128,6 +128,25 @@ function startMission(missionName, moneyReward, xpReward, duration) {
     }, 1000);
 }
 
+    setTimeout(() => {
+        clearInterval(countdownInterval);
+        completeMission(name);
+    }, duration * 60000);
+
+function updateCountdown(name, endTime) {
+    const now = new Date().getTime();
+    const distance = endTime - now;
+
+    if (distance < 0) {
+        document.getElementById('missionCountdown').innerText = 'Mission completed!';
+        return;
+    }
+
+    const minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
+    const seconds = Math.floor((distance % (1000 * 60)) / 1000);
+    document.getElementById('missionCountdown').innerText = `Time remaining: ${minutes}m ${seconds}s`;
+}
+
 function completeMission(name) {
     const mission = activeMissions[name];
     if (!mission) return;
@@ -148,6 +167,7 @@ function showCompletionModal(name, rewardMoney, rewardXP) {
 }
 
 function claimMissionReward() {
+    const claimButton = document.getElementById('claimRewardButton');
     const rewardMoney = parseInt(claimButton.getAttribute('data-reward-money'));
     const rewardXP = parseInt(claimButton.getAttribute('data-reward-xp'));
     money += rewardMoney;
@@ -196,7 +216,6 @@ function closePopupById(popupId) {
     }
 }
 
-// Crafting
 function craftItem(item, cost) {
     if (money >= cost) {
         money -= cost;
@@ -250,6 +269,18 @@ function craftItem(item, cost) {
     }
 }
 
+function craftItem(itemName, cost) {
+    const moneyElement = document.getElementById('money');
+    const money = parseInt(moneyElement.textContent);
+    if (money >= cost) {
+        moneyElement.textContent = money - cost;
+        alert(`You have crafted a ${itemName}!`);
+    } else {
+        document.getElementById('craftingPopupText').textContent = `You don't have enough money to craft a ${itemName}.`;
+        showPopup('craftingPopup');
+    }
+}
+
 // Research management
 function researchItem(itemName, cost) {
     if (xp >= cost) {
@@ -262,7 +293,6 @@ function researchItem(itemName, cost) {
     }
 }
 
-// Combat handling
 function engageCombat(unit, power, reward) {
     alert(`Engaging in combat with: ${unit} (Power: ${power})`);
     const result = calculateCombatOutcome(power);
@@ -283,7 +313,6 @@ function calculateCombatOutcome(power) {
     return power > enemyPower;
 }
 
-// Functions to handle popups
 function showPopup(popupId) {
     document.getElementById(popupId).style.display = 'block';
 }
@@ -292,7 +321,6 @@ function closePopup(popupId) {
     document.getElementById(popupId).style.display = 'none';
 }
 
-// Upgrade Unit
 function upgradeUnit(unit) {
     let cost = upgradeCosts[unit];
     if (xp >= cost) {
@@ -306,34 +334,49 @@ function upgradeUnit(unit) {
     }
 }
 
-// Economy Upgrade
+
+// Function to upgrade economy features
 function upgradeEconomy(type, cost) {
+    // Check if the user has enough XP
     let currentXP = parseInt(document.getElementById('xp').innerText);
     if (currentXP >= cost) {
+        // Deduct the cost from the user's XP
         document.getElementById('xp').innerText = currentXP - cost;
 
-        // Specific upgrade logic
+        // Handle the specific upgrade logic (e.g., increase resource generation)
         switch (type) {
             case 'Resource Generation':
-                resourceGeneration += 10;
+                // Increase resource generation rate
                 break;
             case 'Advanced Logistics':
-                resourceGeneration += 20;
+                // Enhance logistics capabilities
                 break;
             case 'Financial Management':
-                resourceGeneration += 30;
+                // Improve financial management
                 break;
             default:
                 break;
         }
 
+        // Show success popup
         showPopup('successPopup');
     } else {
+        // Show failure popup
         showPopup('failurePopup');
     }
 }
 
-// Achievements
+// Function to show a popup
+function showPopup(popupId) {
+    document.getElementById(popupId).style.display = 'block';
+}
+
+// Function to close a popup
+function closePopup(popupId) {
+    document.getElementById(popupId).style.display = 'none';
+}
+
+
 function addAchievement(description) {
     achievements.push(description);
     if (achievements.length > 5) {
@@ -353,7 +396,6 @@ function updateAchievements() {
     });
 }
 
-// Rank Details
 function showRankDetails(rankName) {
     const rank = ranks.find(r => r.name === rankName);
     if (!rank) return;
@@ -373,39 +415,91 @@ function showRankDetails(rankName) {
     rankDetailsElement.style.display = 'block';
 }
 
-// Pay Grade Details
+// Function to display pay grade details
 function showPayGradeDetails(payGrade) {
     const payGradeInfo = payGrades[payGrade];
     if (!payGradeInfo) return;
 
-    showModal('payGradeModal');
+    const modal = document.getElementById('payGradeModal');
+    modal.style.display = 'block';
+
     document.getElementById('payGradeTitle').innerText = payGrade;
     document.getElementById('payGradeDescription').innerText = payGradeInfo.description;
-    document.getElementById('payGradeSalary').innerText = payGradeInfo.salary;
-    document.getElementById('payGradeRequirements').innerText = payGradeInfo.requirements;
+    document.getElementById('payGradeExperience').innerText = payGradeInfo.experience;
 }
 
-// Show modal
-function showModal(modalId) {
-    const modal = document.getElementById(modalId);
-    if (modal) {
-        modal.style.display = 'block';
-    }
-}
-
-// Close modal
+// Function to close modal
 function closeModal(modalId) {
-    const modal = document.getElementById(modalId);
-    modal.style.display = 'none';
+    document.getElementById(modalId).style.display = 'none';
 }
 
-// Close modal when clicking outside
+// Event listener to close modal when clicking outside
 window.onclick = function(event) {
     const modal = document.getElementById('payGradeModal');
     if (event.target == modal) {
         modal.style.display = 'none';
     }
 }
+
+// Function to show pay grade details in a modal
+// Function to show pay grade details in a modal
+function showPayGradeDetails(payGrade) {
+    const payGradeDetails = {
+        "E-1": { title: "E-1", description: "E-1 is the 1st enlisted paygrade in the United States military.", salary: "Monthly Salary: $1,733", requirements: "No prior experience required. Basic training completion is needed." },
+        "E-2": { title: "E-2", description: "Rank for soldiers after initial training.", salary: "Monthly Salary: $1,943", requirements: "Completion of basic training and several months of service." },
+        "E-3": { title: "E-3", description: "Private First Class (E-3) and Seaman rank, focuses on gaining experience.", salary: "Monthly Salary: $2,043", requirements: "Generally 6 months to a year of service." },
+        "E-4": { title: "E-4", description: "Encompasses Specialist and Corporal ranks.", salary: "Monthly Salary: $2,330", requirements: "2 to 4 years of service and a strong performance in their roles." },
+        "E-5": { title: "E-5", description: "Sergeant rank, first level of non-commissioned officer (NCO).", salary: "Monthly Salary: $2,610", requirements: "4 to 6 years of service and leadership experience." },
+        "E-6": { title: "E-6", description: "Staff Sergeant rank, responsible for training and guiding junior soldiers.", salary: "Monthly Salary: $2,849", requirements: "6 to 8 years of service with advanced leadership skills." },
+        "E-7": { title: "E-7", description: "Sergeant First Class, mid-level NCO with significant leadership duties.", salary: "Monthly Salary: $3,245", requirements: "8 to 12 years of service and proven leadership abilities." },
+        "E-8": { title: "E-8", description: "Master Sergeant/First Sergeant, senior NCO roles with high responsibilities.", salary: "Monthly Salary: $4,136", requirements: "12 to 18 years of service and extensive leadership experience." },
+        "E-9": { title: "E-9", description: "Sergeant Major, the highest NCO rank with vast command responsibilities.", salary: "Monthly Salary: $5,173", requirements: "Over 18 years of service and exceptional leadership." },
+        "O-1": { title: "O-1", description: "Second Lieutenant, the entry-level rank for commissioned officers.", salary: "Monthly Salary: $3,287", requirements: "Completion of officer training and commissioning." },
+        "O-2": { title: "O-2", description: "First Lieutenant, a junior officer rank with increased responsibilities.", salary: "Monthly Salary: $3,787", requirements: "1 to 2 years of service and completion of initial officer training." },
+        "O-3": { title: "O-3", description: "Captain, mid-level officer with command responsibilities.", salary: "Monthly Salary: $4,383", requirements: "2 to 4 years of service and leadership roles." },
+        "O-4": { title: "O-4", description: "Major, senior officer with significant command and staff roles.", salary: "Monthly Salary: $5,273", requirements: "4 to 8 years of service with advanced responsibilities." },
+        "O-5": { title: "O-5", description: "Lieutenant Colonel, senior officer rank with major command duties.", salary: "Monthly Salary: $6,137", requirements: "8 to 12 years of service with extensive leadership roles." },
+        "O-6": { title: "O-6", description: "Colonel, high-ranking officer with significant command responsibilities.", salary: "Monthly Salary: $7,173", requirements: "12 to 18 years of service with top-level command experience." },
+        "O-7": { title: "O-7", description: "Brigadier General, the first of the general officer ranks.", salary: "Monthly Salary: $9,137", requirements: "Over 18 years of service with exceptional command and leadership." },
+        "O-8": { title: "O-8", description: "Major General, senior general officer with large command duties.", salary: "Monthly Salary: $10,243", requirements: "Extensive service and proven high-level command skills." },
+        "O-9": { title: "O-9", description: "Lieutenant General, very high-ranking general officer.", salary: "Monthly Salary: $11,183", requirements: "Outstanding service record and significant command experience." },
+        "O-10": { title: "O-10", description: "General, the highest rank in the military.", salary: "Monthly Salary: $12,173", requirements: "Exceptional leadership and over 30 years of service." }
+    };
+
+    const modal = document.getElementById('payGradeModal');
+    const title = document.getElementById('payGradeTitle');
+    const description = document.getElementById('payGradeDescription');
+    const salary = document.getElementById('payGradeSalary');
+    const requirements = document.getElementById('payGradeRequirements');
+
+    if (payGradeDetails[payGrade]) {
+        title.innerText = payGradeDetails[payGrade].title;
+        description.innerText = payGradeDetails[payGrade].description;
+        salary.innerText = payGradeDetails[payGrade].salary;
+        requirements.innerText = payGradeDetails[payGrade].requirements;
+    } else {
+        title.innerText = "Pay Grade Details";
+        description.innerText = "Details for this pay grade are currently not available.";
+        salary.innerText = "";
+        requirements.innerText = "";
+    }
+
+    modal.style.display = "block";
+}
+
+function closeModal() {
+    const modal = document.getElementById('payGradeModal');
+    modal.style.display = "none";
+}
+
+// Close the modal when clicking outside of it
+window.onclick = function(event) {
+    const modal = document.getElementById('payGradeModal');
+    if (event.target == modal) {
+        modal.style.display = "none";
+    }
+}
+
 
 // Array containing rank details
 const ranks = [
@@ -531,29 +625,6 @@ const ranks = [
     }
 ];
 
-// Array containing pay grade details
-const payGrades = {
-    "E-1": { title: "E-1", description: "E-1 is the 1st enlisted paygrade in the United States military.", salary: "Monthly Salary: $1,733", requirements: "No prior experience required. Basic training completion is needed." },
-    "E-2": { title: "E-2", description: "Rank for soldiers after initial training.", salary: "Monthly Salary: $1,943", requirements: "Completion of basic training and several months of service." },
-    "E-3": { title: "E-3", description: "Private First Class (E-3) and Seaman rank, focuses on gaining experience.", salary: "Monthly Salary: $2,043", requirements: "Generally 6 months to a year of service." },
-    "E-4": { title: "E-4", description: "Encompasses Specialist and Corporal ranks.", salary: "Monthly Salary: $2,330", requirements: "2 to 4 years of service and a strong performance in their roles." },
-    "E-5": { title: "E-5", description: "Sergeant rank, first level of non-commissioned officer (NCO).", salary: "Monthly Salary: $2,610", requirements: "4 to 6 years of service and leadership experience." },
-    "E-6": { title: "E-6", description: "Staff Sergeant rank, responsible for training and guiding junior soldiers.", salary: "Monthly Salary: $2,849", requirements: "6 to 8 years of service with advanced leadership skills." },
-    "E-7": { title: "E-7", description: "Sergeant First Class, mid-level NCO with significant leadership duties.", salary: "Monthly Salary: $3,245", requirements: "8 to 12 years of service and proven leadership abilities." },
-    "E-8": { title: "E-8", description: "Master Sergeant/First Sergeant, senior NCO roles with high responsibilities.", salary: "Monthly Salary: $4,136", requirements: "12 to 18 years of service and extensive leadership experience." },
-    "E-9": { title: "E-9", description: "Sergeant Major, the highest NCO rank with vast command responsibilities.", salary: "Monthly Salary: $5,173", requirements: "Over 18 years of service and exceptional leadership." },
-    "O-1": { title: "O-1", description: "Second Lieutenant, the entry-level rank for commissioned officers.", salary: "Monthly Salary: $3,287", requirements: "Completion of officer training and commissioning." },
-    "O-2": { title: "O-2", description: "First Lieutenant, a junior officer rank with increased responsibilities.", salary: "Monthly Salary: $3,787", requirements: "1 to 2 years of service and completion of initial officer training." },
-    "O-3": { title: "O-3", description: "Captain, mid-level officer with command responsibilities.", salary: "Monthly Salary: $4,383", requirements: "2 to 4 years of service and leadership roles." },
-    "O-4": { title: "O-4", description: "Major, senior officer with significant command and staff roles.", salary: "Monthly Salary: $5,273", requirements: "4 to 8 years of service with advanced responsibilities." },
-    "O-5": { title: "O-5", description: "Lieutenant Colonel, senior officer rank with major command duties.", salary: "Monthly Salary: $6,137", requirements: "8 to 12 years of service with extensive leadership roles." },
-    "O-6": { title: "O-6", description: "Colonel, high-ranking officer with significant command responsibilities.", salary: "Monthly Salary: $7,173", requirements: "12 to 18 years of service with top-level command experience." },
-    "O-7": { title: "O-7", description: "Brigadier General, the first of the general officer ranks.", salary: "Monthly Salary: $9,137", requirements: "Over 18 years of service with exceptional command and leadership." },
-    "O-8": { title: "O-8", description: "Major General, senior general officer with large command duties.", salary: "Monthly Salary: $10,243", requirements: "Extensive service and proven high-level command skills." },
-    "O-9": { title: "O-9", description: "Lieutenant General, very high-ranking general officer.", salary: "Monthly Salary: $11,183", requirements: "Outstanding service record and significant command experience." },
-    "O-10": { title: "O-10", description: "General, the highest rank in the military.", salary: "Monthly Salary: $12,173", requirements: "Exceptional leadership and over 30 years of service." }
-};
-
 function engageCombat(unit, power, reward) {
     const resultElement = document.getElementById('combatResult');
     resultElement.innerHTML = `Engaging in combat with: ${unit} (Power: ${power})...`;
@@ -571,10 +642,16 @@ function engageCombat(unit, power, reward) {
     }, 3000);
 }
 
-// Combat popup and animation handling
+function calculateCombatOutcome(power) {
+    const enemyPower = Math.floor(Math.random() * (power * 1.5));
+    return power > enemyPower;
+}
+
 function engageCombat(unit, power, reward) {
+    // Show the combat popup
     document.getElementById('combatPopup').style.display = 'block';
 
+    // Initialize life bars
     let playerLife = 100;
     let enemyLife = 100;
     const playerLifeBar = document.getElementById('playerLifeBar');
@@ -584,13 +661,17 @@ function engageCombat(unit, power, reward) {
     playerLifeBar.style.width = `${playerLife}%`;
     enemyLifeBar.style.width = `${enemyLife}%`;
 
+    // Combat animation
     const combatInterval = setInterval(() => {
+        // Reduce life bars
         playerLife -= Math.floor(Math.random() * 10);
         enemyLife -= Math.floor(Math.random() * 10 + 5);
 
+        // Update life bars
         playerLifeBar.style.width = `${Math.max(playerLife, 0)}%`;
         enemyLifeBar.style.width = `${Math.max(enemyLife, 0)}%`;
 
+        // Check if combat is over
         if (playerLife <= 0 || enemyLife <= 0) {
             clearInterval(combatInterval);
             if (playerLife > enemyLife) {
@@ -602,7 +683,7 @@ function engageCombat(unit, power, reward) {
             }
             updateResources();
         }
-    }, 1000);
+    }, 1000); // Update every second
 }
 
 function closeCombatPopup() {
@@ -610,6 +691,7 @@ function closeCombatPopup() {
     document.getElementById('combatResultMessage').innerHTML = '';
 }
 
+// Function to update the combat overview display
 function updateCombatOverview() {
     document.getElementById('combatSoldiers').innerText = soldiers;
     document.getElementById('combatTanks').innerText = tanks;
@@ -617,34 +699,102 @@ function updateCombatOverview() {
     document.getElementById('totalPower').innerText = calculateTotalPower();
 }
 
+// Function to calculate the total power of the player's units
 function calculateTotalPower() {
     return (soldiers * unitPowers['Soldier']) + (tanks * unitPowers['Tank']) + (helicopters * unitPowers['Helicopter']);
 }
 
-// Close modals and popups
-function closeModalById(modalId) {
-    const modal = document.getElementById(modalId);
-    if (modal) {
-        modal.style.display = 'none';
+// Function to update resources and combat overview
+function updateResources() {
+    document.getElementById('money').innerText = money;
+    document.getElementById('xp').innerText = xp;
+    document.getElementById('soldierCount').innerText = soldiers;
+    document.getElementById('tankCount').innerText = tanks;
+    document.getElementById('helicopterCount').innerText = helicopters;
+
+    // Update combat overview
+    updateCombatOverview();
+}
+
+function craftItem(item, cost) {
+    if (money >= cost) {
+        money -= cost;
+        switch (item) {
+            case 'Soldier':
+                soldiers++;
+                break;
+            case 'Tank':
+                tanks++;
+                break;
+            case 'Helicopter':
+                helicopters++;
+                break;
+            // Add other cases as necessary
+        }
+        alert(`Crafted: ${item}`);
+        updateResources();
+    } else {
+        alert('Not enough money!');
     }
 }
 
-function closePopupById(popupId) {
-    const popup = document.getElementById(popupId);
-    if (popup) {
-        popup.style.display = 'none';
-    }
+
+// Function to engage in combat and handle combat outcomes
+function engageCombat(unit, enemyPower, reward) {
+    // Show the combat popup
+    document.getElementById('combatPopup').style.display = 'block';
+
+    // Initialize life bars and calculate initial battle power
+    let playerLife = 100;
+    let enemyLife = 100;
+    const playerPower = calculateTotalPower();
+    const playerLifeBar = document.getElementById('playerLifeBar');
+    const enemyLifeBar = document.getElementById('enemyLifeBar');
+    const resultMessage = document.getElementById('combatResultMessage');
+
+    playerLifeBar.style.width = `${playerLife}%`;
+    enemyLifeBar.style.width = `${enemyLife}%`;
+
+    // Combat animation
+    const combatInterval = setInterval(() => {
+        // Calculate damage based on power ratio
+        let playerDamage = Math.max((playerPower / enemyPower) * 10, 1); // Minimum damage of 1
+        let enemyDamage = Math.max((enemyPower / playerPower) * 10, 1); // Minimum damage of 1
+
+        // If the enemy power is significantly higher, amplify their damage to the player
+        if (enemyPower > playerPower) {
+            enemyDamage *= 1 + ((enemyPower - playerPower) / playerPower);
+        } else if (playerPower > enemyPower) {
+            // Amplify player's damage to the enemy if the player power is significantly higher
+            playerDamage *= 1 + ((playerPower - enemyPower) / enemyPower);
+        }
+
+        // Reduce life bars based on calculated damage
+        playerLife -= enemyDamage;
+        enemyLife -= playerDamage;
+
+        // Update life bars
+        playerLifeBar.style.width = `${Math.max(playerLife, 0)}%`;
+        enemyLifeBar.style.width = `${Math.max(enemyLife, 0)}%`;
+
+        // Check if combat is over
+        if (playerLife <= 0 || enemyLife <= 0) {
+            clearInterval(combatInterval);
+            if (enemyLife <= 0) {
+                money += reward;
+                xp += reward / 2;
+                resultMessage.innerHTML = `Victory! You won the combat with ${unit} and earned ${reward} Money and ${reward / 2} XP.`;
+            } else {
+                resultMessage.innerHTML = `Defeat. You lost the combat with ${unit}. Better luck next time!`;
+            }
+            updateResources();
+            handleTroopLoss(playerLife, enemyLife, enemyPower);
+        }
+    }, 1000); // Update every second
 }
 
-document.querySelectorAll('.close').forEach(button => {
-    button.addEventListener('click', function() {
-        const modalId = this.getAttribute('data-modal');
-        document.getElementById(modalId).style.display = 'none';
-    });
-});
-
-// Troop loss handling
 function handleTroopLoss(playerLife, enemyLife, enemyPower) {
+    // Calculate the number of troops lost
     const playerInitialLife = 100;
     const lifeLost = playerInitialLife - playerLife;
     const powerRatio = lifeLost / playerInitialLife;
@@ -655,6 +805,7 @@ function handleTroopLoss(playerLife, enemyLife, enemyPower) {
         'Helicopters': helicopters
     };
 
+    // Adjust troop counts based on power ratio
     soldiers -= Math.floor(initialTroops['Soldiers'] * powerRatio);
     tanks -= Math.floor(initialTroops['Tanks'] * powerRatio);
     helicopters -= Math.floor(initialTroops['Helicopters'] * powerRatio);
@@ -671,60 +822,66 @@ function handleTroopLoss(playerLife, enemyLife, enemyPower) {
     updateResources();
 }
 
-function showPayGradeDetails(payGrade) {
-    const payGradeDetails = {
-        "E-1": { title: "E-1", description: "E-1 is the 1st enlisted paygrade in the United States military.", salary: "Monthly Salary: $1,733", requirements: "No prior experience required. Basic training completion is needed." },
-        "E-2": { title: "E-2", description: "Rank for soldiers after initial training.", salary: "Monthly Salary: $1,943", requirements: "Completion of basic training and several months of service." },
-        "E-3": { title: "E-3", description: "Private First Class (E-3) and Seaman rank, focuses on gaining experience.", salary: "Monthly Salary: $2,043", requirements: "Generally 6 months to a year of service." },
-        "E-4": { title: "E-4", description: "Encompasses Specialist and Corporal ranks.", salary: "Monthly Salary: $2,330", requirements: "2 to 4 years of service and a strong performance in their roles." },
-        "E-5": { title: "E-5", description: "Sergeant rank, first level of non-commissioned officer (NCO).", salary: "Monthly Salary: $2,610", requirements: "4 to 6 years of service and leadership experience." },
-        "E-6": { title: "E-6", description: "Staff Sergeant rank, responsible for training and guiding junior soldiers.", salary: "Monthly Salary: $2,849", requirements: "6 to 8 years of service with advanced leadership skills." },
-        "E-7": { title: "E-7", description: "Sergeant First Class, mid-level NCO with significant leadership duties.", salary: "Monthly Salary: $3,245", requirements: "8 to 12 years of service and proven leadership abilities." },
-        "E-8": { title: "E-8", description: "Master Sergeant/First Sergeant, senior NCO roles with high responsibilities.", salary: "Monthly Salary: $4,136", requirements: "12 to 18 years of service and extensive leadership experience." },
-        "E-9": { title: "E-9", description: "Sergeant Major, the highest NCO rank with vast command responsibilities.", salary: "Monthly Salary: $5,173", requirements: "Over 18 years of service and exceptional leadership." },
-        "O-1": { title: "O-1", description: "Second Lieutenant, the entry-level rank for commissioned officers.", salary: "Monthly Salary: $3,287", requirements: "Completion of officer training and commissioning." },
-        "O-2": { title: "O-2", description: "First Lieutenant, a junior officer rank with increased responsibilities.", salary: "Monthly Salary: $3,787", requirements: "1 to 2 years of service and completion of initial officer training." },
-        "O-3": { title: "O-3", description: "Captain, mid-level officer with command responsibilities.", salary: "Monthly Salary: $4,383", requirements: "2 to 4 years of service and leadership roles." },
-        "O-4": { title: "O-4", description: "Major, senior officer with significant command and staff roles.", salary: "Monthly Salary: $5,273", requirements: "4 to 8 years of service with advanced responsibilities." },
-        "O-5": { title: "O-5", description: "Lieutenant Colonel, senior officer rank with major command duties.", salary: "Monthly Salary: $6,137", requirements: "8 to 12 years of service with extensive leadership roles." },
-        "O-6": { title: "O-6", description: "Colonel, high-ranking officer with significant command responsibilities.", salary: "Monthly Salary: $7,173", requirements: "12 to 18 years of service with top-level command experience." },
-        "O-7": { title: "O-7", description: "Brigadier General, the first of the general officer ranks.", salary: "Monthly Salary: $9,137", requirements: "Over 18 years of service with exceptional command and leadership." },
-        "O-8": { title: "O-8", description: "Major General, senior general officer with large command duties.", salary: "Monthly Salary: $10,243", requirements: "Extensive service and proven high-level command skills." },
-        "O-9": { title: "O-9", description: "Lieutenant General, very high-ranking general officer.", salary: "Monthly Salary: $11,183", requirements: "Outstanding service record and significant command experience." },
-        "O-10": { title: "O-10", description: "General, the highest rank in the military.", salary: "Monthly Salary: $12,173", requirements: "Exceptional leadership and over 30 years of service." }
-    };
+function closeCombatPopup() {
+    document.getElementById('combatPopup').style.display = 'none';
+    document.getElementById('combatResultMessage').innerHTML = '';
+}
 
-    const modal = document.getElementById('payGradeModal');
-    const title = document.getElementById('payGradeTitle');
-    const description = document.getElementById('payGradeDescription');
-    const salary = document.getElementById('payGradeSalary');
-    const requirements = document.getElementById('payGradeRequirements');
+// Update resources function to include updating the money display
+function updateCombatOverview() {
+    document.getElementById('currentSoldiers').innerText = soldiers;
+    document.getElementById('currentTanks').innerText = tanks;
+    document.getElementById('currentHelicopters').innerText = helicopters;
+}
 
-    if (payGradeDetails[payGrade]) {
-        title.innerText = payGradeDetails[payGrade].title;
-        description.innerText = payGradeDetails[payGrade].description;
-        salary.innerText = payGradeDetails[payGrade].salary;
-        requirements.innerText = payGradeDetails[payGrade].requirements;
-    } else {
-        title.innerText = "Pay Grade Details";
-        description.innerText = "Details for this pay grade are currently not available.";
-        salary.innerText = "";
-        requirements.innerText = "";
+
+// Calculate total power
+const totalPower = (soldiers * unitPowers['Soldier']) + 
+(tanks * unitPowers['Tank']) + 
+(helicopters * unitPowers['Helicopter']);
+document.getElementById('totalPower').innerText = totalPower;
+
+
+
+document.querySelectorAll('.close').forEach(button => {
+    button.addEventListener('click', function() {
+        const modalId = this.getAttribute('data-modal');
+        document.getElementById(modalId).style.display = 'none';
+    });
+});
+
+
+// Function to close any modal with the given id
+function closeModalById(modalId) {
+    const modal = document.getElementById(modalId);
+    if (modal) {
+        modal.style.display = 'none';
     }
-
-    modal.style.display = "block";
 }
 
-function closeModal() {
-    const modal = document.getElementById('payGradeModal');
-    modal.style.display = "none";
+// Function to close popup modals
+function closePopupById(popupId) {
+    const popup = document.getElementById(popupId);
+    if (popup) {
+        popup.style.display = 'none';
+    }
 }
 
-// Close the modal when clicking outside of it
-window.onclick = function(event) {
-    const modal = document.getElementById('payGradeModal');
-    if (event.target == modal) {
-        modal.style.display = "none";
+// Add event listeners to all close buttons in popups
+document.querySelectorAll('.popup-modal .close, .modal .close, .popup-modal .close-button').forEach(closeBtn => {
+    closeBtn.addEventListener('click', function() {
+        const modal = this.closest('.popup-modal, .modal');
+        if (modal) {
+            modal.style.display = 'none';
+        }
+    });
+});
+
+// Function to show a specific modal
+function showModal(modalId) {
+    const modal = document.getElementById(modalId);
+    if (modal) {
+        modal.style.display = 'block';
     }
 }
 
