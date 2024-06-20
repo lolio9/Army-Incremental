@@ -516,5 +516,19 @@
     </div>
 
     <script src="app.js"></script>
+
+    <script>
+        // Function to close the popup
+        function closePopup() {
+            document.getElementById('popup').style.display = 'none';
+            localStorage.setItem('popupShown', 'true');  // Store in localStorage
+        }
+
+        // Check if the popup has been shown before
+        if (!localStorage.getItem('popupShown')) {
+            document.getElementById('popup').style.display = 'block';
+        }
+    </script>
+
 </body>
 </html>
