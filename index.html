@@ -480,14 +480,6 @@
         </div>
     </div>
 
-    <!-- Generic Modal -->
-    <div id="myModal" class="modal">
-        <div class="modal-content">
-            <span class="close" onclick="closeModal('myModal')">&times;</span>
-            <button id="claimRewardButton" onclick="claimReward()">Claim Reward</button>
-        </div>
-    </div>
-
     <!-- Custom Popup for Crafting -->
     <div id="craftingPopup" class="custom-popup">
         <div class="popup-content">
@@ -517,18 +509,7 @@
 
     <script src="app.js"></script>
 
-    <script>
-        // Function to close the popup
-        function closePopup() {
-            document.getElementById('popup').style.display = 'none';
-            localStorage.setItem('popupShown', 'true');  // Store in localStorage
-        }
 
-        // Check if the popup has been shown before
-        if (!localStorage.getItem('popupShown')) {
-            document.getElementById('popup').style.display = 'block';
-        }
-    </script>
-
+    
 </body>
 </html>
