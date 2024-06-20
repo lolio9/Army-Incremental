@@ -87,15 +87,7 @@
                     <p>Duration: 15 minutes</p>
                 </div>
             </div>
-            <div id="missionModal" class="modal">
-                <div class="modal-content">
-                    <span class="close" onclick="closeModal('missionModal')">&times;</span>
-                    <h2 id="missionTitle"></h2>
-                    <p id="missionDescription"></p>
-                    <p id="missionRewards"></p>
-                    <p id="missionCountdown"></p>
-                </div>
-            </div>
+           
         </section>
 
         <section id="crafting" class="section">
@@ -488,6 +480,15 @@
             <h2>Research Alert</h2>
             <p id="researchPopupText">You don't have enough XP to start this research.</p>
             <button class="close-button" onclick="closePopup('researchPopup')">Close</button>
+        </div>
+    </div>
+
+    <!-- Custom Popup for Missions -->
+    <div id="missionPopup" class="custom-popup">
+        <div class="popup-content">
+            <h2>Mission Alert</h2>
+            <p id="missionPopupText">You don't have enough resources for this mission.</p>
+            <button class="close-button" onclick="closePopup('missionPopup')">Close</button>
         </div>
     </div>
 
